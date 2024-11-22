@@ -1,10 +1,18 @@
-<a href="{% url 'product_details' %}"">
-   <div class="bg-gray-100 h-[170px] rounded-lg">
-      <img src="ll" alt="image">
+<a class="border border-gray-100 p-4 rounded-md shadow-sm" href="{% url 'product_details' product.id %}">
+   <div class="rounded-lg">
+      <img   
+         class=" rounded-lg object-cover" 
+         src="{{ product.image.url }}" 
+         alt="{{ product.name }}">
    </div>
-   <div class="flex justify-between text-black mt-2">
-       <p>Microphone</p>
-       <p>BDT 550</p>
+   <p class="text-black mt-2">{{ product.name }}</p>
+   <div class="flex text-sm justify-between text-black mt-2 font-semibold">
+       <p class="font-bold text-blue-700">Price: <span class="text-blue-700"></span> {{ product.price }}</p>
+       <p class="flex font-bold gap-1 justify-center items-center">4.7
+         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="yellow">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.54 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
+          </svg>
+       </p>
    </div>
-   <p class="text-sm ">Gorib shop</p>
+   <p class="text-sm">{{ product.store.name }}</p>
 </a>

@@ -5,6 +5,12 @@
          <h1 class="text-2xl font-bold text-gray-900">Add New Product</h1>
          <p class="mt-2 text-sm text-gray-600">Fill in the details below to add a new product to your inventory.</p>
       </div>
+      {% if error %}
+         <div class="flex justify-center">
+            <p class="text-red-500">{{ error }}</p>
+         </div>
+         
+      {% endif %}
       <form method="post"
             enctype="multipart/form-data"
             class="max-w-2xl mx-auto space-y-6">
@@ -88,11 +94,37 @@
       <div class="pt-5">
          <div class="flex justify-end">
             <button type="submit"
-                    class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    class="px-4 py-2 rounded-md bg-primary text-sm text-primary-foreground font-semibold active:scale-95 transition-transform">
                Save Product
             </button>
          </div>
       </div>
    </form>
+
+   <!-- Success Modal -->
+   <div id="successModal" class="fixed inset-0 z-50 hidden">
+      <div class="fixed inset-0 bg-black/30 backdrop-blur-sm"></div>
+      <div class="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm p-6 bg-white rounded-lg shadow-xl opacity-0 transition-opacity duration-300">
+         <div class="text-center space-y-4">
+            <!-- Success Icon -->
+            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+               <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+               </svg>
+            </div>
+            
+            <h3 class="text-lg font-medium text-gray-900">Product Added Successfully!</h3>
+            <p class="text-sm text-gray-500">Your product has been successfully added to the store.</p>
+            
+            <div class="mt-5">
+               <button type="button" onclick="closeModal()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:text-sm">
+                  Close
+               </button>
+            </div>
+         </div>
+      </div>
+   </div>
+
+ 
 </main>
 {% endblock slot %}

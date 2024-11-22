@@ -11,7 +11,7 @@ class Product(models.Model):
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE, related_name="products")
     name = models.CharField(max_length=255)
     category = models.CharField(max_length=255)
-    SKU = models.CharField(max_length=50, unique=True)
+    sku = models.CharField(max_length=50, unique=True)
     description = models.TextField()
     image = models.ImageField(upload_to="product_images/")
     price = models.DecimalField(max_digits=10, decimal_places=2)

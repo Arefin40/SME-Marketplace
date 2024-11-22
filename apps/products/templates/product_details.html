@@ -1,77 +1,117 @@
-{% extends "layouts/root_layout.html" %} {% block slot %}
-<main class="p-6 col-start-2 col-span-1 bg-white flex-1 rounded-lg shadow-card">
-   <section>
-      <div class="w-full  grid grid-cols-1 md:grid-cols-2 gap-4">
-         <div class="flex gap-3 w-full">
-            <div class="flex flex-col gap-2">
-               <div class="bg-gray-200 rounded-lg h-[125px] w-[125px]"></div>
-               <div class="bg-gray-200 rounded-lg h-[125px] w-[125px]"></div>
-               <div class="bg-gray-200 rounded-lg h-[125px] w-[125px]"></div>
-            </div>
-            <div class="bg-gray-200 max-h-[450px] max-w-[400px] rounded-xl w-full"></div>
-         </div>
-         <div class="flex flex-col justify-between">
-             <h1 class="text-2xl font-bold text-black">Traditonal shirt -classic white</h1>
-             <p class="my-6 text-xl text-gray-800 font-semibold">4500 TK</p>
-             <div class="text-md">
-                 <p class="mb-2">Stock : <span class="text-green-500"> Available</span></p>
-                 <p>SKU : VM-23478</p>
-             </div>
-             <div class="flex gap-3 my-6">
-               <button class="bg-blue-400 text-white text-sm font-semibold rounded-full px-6 py-2 flex justify-center items-center gap-2 ">{% include 'icons/shoppingCart.html'%} Add to Cart</button>
-               <button class="bg-gray-300 text-black text-sm font-semibold rounded-full px-6 py-2 flex justify-center items-center gap-2 ">{% include 'icons/love_sign.html'%} Add to Cart</button>
-             </div>
-             <div class="flex gap-6 items-center mt-12">
-                <div class="h-[64px] w-[64px] rounded-full bg-gray-200"></div>
-                <div>
-                  <p class="text-md font-bold text-gray-800">Arefin er Dokan</p>
-                  <p class="text-sm font-bold">12K Followers</p>
+{% extends "layouts/root_layout.html" %}
+{% block slot %}
+    <main class="p-6 col-start-2 col-span-1 bg-white flex-1 rounded-lg shadow-card">
+        <section>
+            <div class="w-full  grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex gap-3 w-full">
+                    <div class="flex flex-col gap-2">
+                        <div class="bg-gray-200 rounded-lg h-[125px] w-[125px] border">
+                            <img height="full"
+                                 width="full"
+                                 src="{{ p.image.url }}"
+                                 alt="{{ p.name }}"
+                                 class="h-full w-full object-cover rounded-lg">
+                        </div>
+                        <div class="bg-gray-200 rounded-lg h-[125px] w-[125px] border">
+                            <img height="full"
+                                 width="full"
+                                 src="{{ p.image.url }}"
+                                 alt="{{ p.name }}"
+                                 class="h-full w-full object-cover rounded-lg">
+                        </div>
+                        <div class="bg-gray-200 rounded-lg h-[125px] w-[125px] border">
+                            <img height="full"
+                                 width="full"
+                                 src="{{ p.image.url }}"
+                                 alt="{{ p.name }}"
+                                 class="h-full w-full object-cover rounded-lg">
+                        </div>
+                        
+                    </div>
+                    <div class="max-h-[450px] max-w-[400px] rounded-xl w-full p-6 border">
+                        <img height="full"
+                             width="full"
+                             src="{{ p.image.url }}"
+                             alt="{{ p.name }}"
+                             class="h-full w-full object-cover">
+                    </div>
                 </div>
-                <button class="bg-black rounded-full px-6 py-2 text-white font-semibold">Follow</button>
-             </div>
-             
-         </div>
-      </div>
-      <div class="p-6 rounded-md my-6 md:my-12">
-         <h2 class="text-lg font-semibold text-gray-900 mb-4">Product Details</h2>
-         <table class="w-full text-left text-gray-800">
-             <tbody>
-                 <tr class=" ">
-                     <th class="py-2 pr-4 text-gray-500 font-medium w-1/3">Type</th>
-                     <td class="py-2">Full-sleeved traditional Panjabi.</td>
-                 </tr>
-                 <tr class=" ">
-                     <th class="py-2 pr-4 text-gray-500 font-medium">Embroidery</th>
-                     <td class="py-2">Subtle, intricate hand-embroidered detailing along the collar and cuffs.</td>
-                 </tr>
-                 <tr class=" ">
-                     <th class="py-2 pr-4 text-gray-500 font-medium">Neckline</th>
-                     <td class="py-2">Mandarin collar (banded collar) with handmade fabric buttons.</td>
-                 </tr>
-                 <tr class=" ">
-                     <th class="py-2 pr-4 text-gray-500 font-medium">Fit</th>
-                     <td class="py-2">Regular fit with comfortable side slits for ease of movement.</td>
-                 </tr>
-                 <tr class=" ">
-                     <th class="py-2 pr-4 text-gray-500 font-medium">Color</th>
-                     <td class="py-2">Classic White.</td>
-                 </tr>
-                 <tr class=" ">
-                     <th class="py-2 pr-4 text-gray-500 font-medium">Length</th>
-                     <td class="py-2">Knee-length traditional cut.</td>
-                 </tr>
-                 <tr>
-                     <th class="py-2 pr-4 text-gray-500 font-medium">Material</th>
-                     <td class="py-2">
-                         100% Pure Cotton<br>
-                         Lightweight, breathable fabric perfect for year-round wear.<br>
-                         Handwoven by skilled artisans to ensure premium quality and durability.
-                     </td>
-                 </tr>
-             </tbody>
-         </table>
-     </div>
-     
-   </section>
+                <div class="flex flex-col justify-between">
+                    <h1 class="text-2xl font-bold text-black">{{ p.name }}</h1>
+                    <p class="my-6 text-xl text-gray-800 font-semibold">{{ p.price }} TK</p>
+                    <div class="text-md">
+                        <p class="mb-2">
+                            Stock : <span class="text-green-500">
+                            {% if p.stock > 0 %}
+                                Available
+                            {% else %}
+                                Out of Stock
+                            {% endif %}
+                        </span>
+                    </p>
+                    <p>SKU : {{ p.sku }}</p>
+                </div>
+                <div class="flex gap-3 my-6">
+                    <button class="bg-blue-400 text-white text-sm font-semibold rounded-full px-6 py-2 flex justify-center items-center gap-2 ">
+                        {% include "icons/shoppingCart.html" %}
+                        Add to Cart
+                    </button>
+                    <button class="bg-gray-300 text-black text-sm font-semibold rounded-full px-6 py-2 flex justify-center items-center gap-2 ">
+                        {% include "icons/love_sign.html" %}
+                        Add to Cart
+                    </button>
+                </div>
+                <div class="flex gap-6 items-center mt-12">
+                    <div class="h-[64px] w-[64px] rounded-full bg-gray-200"></div>
+                    <div>
+                        <p class="text-md font-bold text-gray-800">Arefin er Dokan</p>
+                        <p class="text-sm font-bold">12K Followers</p>
+                    </div>
+                    <button class="bg-black rounded-full px-6 py-2 text-white font-semibold">Follow</button>
+                </div>
+            </div>
+        </div>
+        <div class="p-6 rounded-md my-6 md:my-12">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Product Details</h2>
+            <table class="w-full text-left text-gray-800">
+                <tbody>
+                    <tr class=" ">
+                        <th class="py-2 pr-4 text-gray-500 font-medium w-1/3">Type</th>
+                        <td class="py-2">Full-sleeved traditional Panjabi.</td>
+                    </tr>
+                    <tr class=" ">
+                        <th class="py-2 pr-4 text-gray-500 font-medium">Embroidery</th>
+                        <td class="py-2">Subtle, intricate hand-embroidered detailing along the collar and cuffs.</td>
+                    </tr>
+                    <tr class=" ">
+                        <th class="py-2 pr-4 text-gray-500 font-medium">Neckline</th>
+                        <td class="py-2">Mandarin collar (banded collar) with handmade fabric buttons.</td>
+                    </tr>
+                    <tr class=" ">
+                        <th class="py-2 pr-4 text-gray-500 font-medium">Fit</th>
+                        <td class="py-2">Regular fit with comfortable side slits for ease of movement.</td>
+                    </tr>
+                    <tr class=" ">
+                        <th class="py-2 pr-4 text-gray-500 font-medium">Color</th>
+                        <td class="py-2">Classic White.</td>
+                    </tr>
+                    <tr class=" ">
+                        <th class="py-2 pr-4 text-gray-500 font-medium">Length</th>
+                        <td class="py-2">Knee-length traditional cut.</td>
+                    </tr>
+                    <tr>
+                        <th class="py-2 pr-4 text-gray-500 font-medium">Material</th>
+                        <td class="py-2">
+                            100% Pure Cotton
+                            <br>
+                            Lightweight, breathable fabric perfect for year-round wear.
+                            <br>
+                            Handwoven by skilled artisans to ensure premium quality and durability.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
 </main>
 {% endblock slot %}

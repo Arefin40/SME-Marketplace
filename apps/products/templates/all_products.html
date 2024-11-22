@@ -1,24 +1,17 @@
-
 {% extends "layouts/root_layout.html" %}
-
 {% block slot %}
-<main class="p-6 col-start-2 col-span-1 bg-white flex-1 rounded-lg shadow-card">
-   <div class="">
-       <div class="">
-           
-            <input class="rounded-full px-6 py-3 outline-none  w-full border-none bg-gray-100 focus:outline-none" type="text" placeholder="search your product">
-            
-       </div>
-       <div class="my-6 md:my-8 grid grid-cols-2 md:grid-cols-4 gap-6 px-2">
-           {% include "snippets/product_card.html" %}
-           {% include "snippets/product_card.html" %}
-           {% include "snippets/product_card.html" %}
-           {% include "snippets/product_card.html" %}
-           {% include "snippets/product_card.html" %}
-           {% include "snippets/product_card.html" %}
-           {% include "snippets/product_card.html" %}
-           {% include "snippets/product_card.html" %}
-       </div>
-   </div>
-</main>
+    <main class="p-6 col-start-2 col-span-1 bg-white flex-1 rounded-lg shadow-card">
+        <div>
+            <div>
+                <input class="rounded-full px-6 py-3 outline-none  w-full border-none bg-gray-100 focus:outline-none"
+                       type="text"
+                       placeholder="search your product">
+            </div>
+            <div class="my-6 md:my-8 grid grid-cols-2 md:grid-cols-4 gap-6 px-2">
+                {% for product in products %}
+                    {% include "snippets/product_card.html" with product=product %}
+                {% endfor %}
+            </div>
+        </div>
+    </main>
 {% endblock slot %}
