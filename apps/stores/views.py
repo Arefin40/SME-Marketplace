@@ -1,11 +1,17 @@
 from django.shortcuts import render, redirect
 from apps.users.decorators import role_required
 from .forms import CreateStoreForm
+from .models import Store
 
 
 # Create your views here.
-def view_store(request):
-    return render(request, "store.html")
+def store(request, slug):
+    try:
+        store = Store.objects.get(slug=slug)
+        collections = store.collections.all().prefetch_related("products")
+        return render(request, "store.html", {"store": store, "collections": collections})
+    except Store.DoesNotExist:
+        return redirect(request.META.get("HTTP_REFERER", "home"))
 
 
 def manage_inventory(request):

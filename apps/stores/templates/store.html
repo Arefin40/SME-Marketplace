@@ -1,70 +1,14 @@
-{% extends "layouts/root_layout.html" %}
+{% extends "layouts/store_layout.html" %}
 
-{% block slot %}
-<section class="col-start-2 col-span-1 bg-white flex rounded-lg shadow-card">
-   <section class="w-full rounded-lg overflow-hidden">
-      <div class=" relative w-full h-[320px] bg-gray-200">
-         <div class="absolute bottom-0 translate-y-1/2 left-6 w-[200px] h-[200px] rounded-full bg-gray-200 border-4 border-white">
-         
-         </div>
-         <div class="absolute flex gap-11 top-[340px] left-60">
-            <div class="mr-[700px]">
-               <p class="font-bold text-2xl text-black">shop name</p>
-               <div class="flex gap-2">
-                  <p>@shopname</p>
-                  <p>12k follower</p>
-               </div>
-            </div>
-            <div>
-               <button class="btn bg-blue-500 text-white rounded-full">Follow Store</button>
-            </div>
-         </div>
+{% block store_content_slot %}
+   {% for collection in collections %}
+      <div class="p-4 text-lg font-semibold bg-white rounded-md space-y-4 shadow-lg border border-gray-100">
+         <h2 class="text font-bold text-foreground">{{ collection.name }}</h2>
+         <main class="grid grid-cols-4 gap-x-5 text-sm">
+            {% for product in collection.products.all %}
+               {% include "snippets/MinimalProductCard.html" with product=product %}
+            {% endfor %}
+         </main>
       </div>
-      
-      <div class="mt-36 ml-11 mb-10">
-         <h1 class="font-bold text-xl text-black">Collection Name</h1>
-      </div>
-      {% comment %} ----------------------------------collection card ----------------------------------{% endcomment %}
-      <div class="flex gap-10">
-         <div class="relative w-[256px] h-[299px] bg-gray-100 rounded-xl mb-10 ml-10">
-            <div class="absolute top-[252px] w-[256px] h-[60px] flex bg-gray-300 gap-2 rounded-b-xl pl-1 pt-1">
-               <div class="w-[48px] h-[48px] rounded-full bg-gray-400"></div>
-               <div>
-                  <p>Product Name</p>
-                  <p>s10</p>
-               </div>
-            </div>
-         </div>
-         <div class="relative w-[256px] h-[299px] bg-gray-100 rounded-xl mb-10 ml-6">
-            <div class="absolute top-[252px] w-[256px] h-[60px] flex bg-gray-300 gap-2 rounded-b-xl pl-1 pt-1">
-               <div class="w-[48px] h-[48px] rounded-full bg-gray-400"></div>
-               <div>
-                  <p>Product Name</p>
-                  <p>s10</p>
-               </div>
-            </div>
-         </div>
-         <div class="relative w-[256px] h-[299px] bg-gray-100 rounded-xl mb-10 ml-6">
-            <div class="absolute top-[252px] w-[256px] h-[60px] flex bg-gray-300 gap-2 rounded-b-xl pl-1 pt-1">
-               <div class="w-[48px] h-[48px] rounded-full bg-gray-400"></div>
-               <div>
-                  <p>Product Name</p>
-                  <p>s10</p>
-               </div>
-            </div>
-         </div>
-         <div class="relative w-[256px] h-[299px] bg-gray-100 rounded-xl mb-10 ml-6">
-            <div class="absolute top-[252px] w-[256px] h-[60px] flex bg-gray-300 gap-2 rounded-b-xl pl-1 pt-1">
-               <div class="w-[48px] h-[48px] rounded-full bg-gray-400"></div>
-               <div>
-                  <p>Product Name</p>
-                  <p>s10</p>
-               </div>
-            </div>
-         </div>
-         
-      </div>
-   </section>
-   
-</section>
-{% endblock slot %}
+   {% endfor %}
+{% endblock store_content_slot %}
