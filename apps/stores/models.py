@@ -12,7 +12,12 @@ class Store(models.Model):
     merchant = models.ForeignKey(User, on_delete=models.CASCADE, related_name="stores")
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
-    logo = models.ImageField(upload_to="stores/logos/", blank=True, null=True)
+    logo = models.ImageField(
+        upload_to="stores/logos/", default="stores/logos/default.svg", blank=True, null=True
+    )
+    cover = models.ImageField(
+        upload_to="stores/covers/", default="stores/covers/default.svg", blank=True, null=True
+    )
     description = models.TextField()
     followers = models.ManyToManyField(
         User, through="StoreFollow", related_name="followed_stores", blank=True
@@ -63,8 +68,9 @@ def increment_total_followers(sender, instance, created, **kwargs):
 
 @receiver(post_delete, sender=StoreFollow)
 def decrement_total_followers(sender, instance, **kwargs):
-    instance.store.total_followers -= 1
-    instance.store.save(update_fields=["total_followers"])
+    if instance.store.total_followers > 0:
+        instance.store.total_followers -= 1
+        instance.store.save(update_fields=["total_followers"])
 
 
 # ===================================

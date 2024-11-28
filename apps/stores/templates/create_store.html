@@ -1,0 +1,98 @@
+{% extends "layouts/root_layout.html" %}
+{% load static %}
+
+{% block slot %}
+   <section class="relative col-start-2 col-span-1 bg-white flex rounded-lg shadow-card h-full overflow-hidden">
+      <!-- Form -->
+      <div class="absolute inset-y-0 left-0 w-96 p-6 flex-shrink-0 flex flex-col overflow-y-auto bg-white border-r z-10">
+         <div class="space-y-3">
+            <h1 class="text-lg font-bold text-foreground">Create Your Store</h1>
+            <p class="leading-snug">
+               Fill in your store details and preview your store's appearance. Click create when you're ready to launch.
+            </p>
+         </div>
+
+         <form method="post" class="space-y-6 mt-5 flex-1">
+            {% csrf_token %}
+            <!-- Store Name -->
+            <div class="space-y-2 form-control">
+               <label for="{{ form.name.id_for_label }}" class="text-base">{{ form.name.label }}</label>
+               {{ form.name }}
+            </div>
+
+            <!-- Store Slug -->
+            <div class="space-y-2 form-control">
+               <label for="{{ form.slug.id_for_label }}" class="text-base">{{ form.slug.label }}</label>
+               {{ form.slug }}
+               <div class="text-sm text-gray-600 leading-snug">
+                  <span>This will be used to create your store's URL. E.g:</span>
+                  <br />
+                  <div class="flex items-center">
+                     <span>shobai.com/</span>
+                     <span class="font-bold">yourstore</span>
+                  </div>
+               </div>
+            </div>
+
+            <!-- Store Logo -->
+            <div class="space-y-2 form-control">
+               <label for="{{ form.logo.id_for_label }}" class="text-base">{{ form.logo.label }}</label>
+               <div class="relative size-36 flex items-center justify-center rounded-full border border-gray-200">
+                  {{ form.logo }}
+
+                  <img src=""
+                       alt=""
+                       width="160"
+                       height="160"
+                       class="hidden store-logo-preview absolute inset-0 h-full rounded-full pointer-events-none overflow-hidden object-cover" />
+
+                  <div class="flex flex-col items-center gap-y-2">
+                     <img src="{% static 'images/upload.svg' %}"
+                          alt="Upload icon"
+                          width="32"
+                          height="32"
+                          class="size-8" />
+                     <p class="text-sm font-medium text-foreground">Click to upload</p>
+                  </div>
+               </div>
+            </div>
+
+            <!-- Store Cover -->
+            <div class="space-y-2 form-control">
+               <label for="{{ form.cover.id_for_label }}" class="text-base">{{ form.cover.label }}</label>
+               <div class="relative w-full p-4 rounded-md border border-gray-200 flex flex-col items-center gap-y-2 overflow-hidden">
+                  {{ form.cover }}
+
+                  <img src=""
+                       alt=""
+                       width="512"
+                       height="512"
+                       class="hidden store-cover-preview absolute inset-0 h-full pointer-events-none overflow-hidden object-cover" />
+
+                  <img src="{% static 'images/upload.svg' %}"
+                       alt="Upload icon"
+                       width="32"
+                       height="32"
+                       class="size-8 pointer-events-none" />
+
+                  <div class="text-center space-y-2 pointer-events-none">
+                     <p class="text-sm font-medium text-foreground">Click to upload</p>
+                     <p class="text-sm text-gray-600">Upload a cover image that will appear at the top of your store page</p>
+                  </div>
+               </div>
+            </div>
+
+            <!-- Store Description -->
+            <div class="space-y-2 form-control">
+               <label for="{{ form.description.id_for_label }}" class="text-base">{{ form.description.label }}</label>
+               {{ form.description }}
+            </div>
+
+            <button class="w-full bg-primary text-white px-4 py-2 rounded-lg">Create Store</button>
+         </form>
+      </div>
+
+      <!-- Preview -->
+      <div class="pl-96 flex-1 overflow-hidden">{% include "snippets/StorePreview.html" %}</div>
+   </section>
+{% endblock slot %}

@@ -43,17 +43,25 @@ function ShowFilter(element) {
    }
 }
 
-function showImage(e) {
+function showImage(event, previewId = "#image-preview") {
    const imageInput = event.target;
-   const preview = document.getElementById("image-preview");
+   const previews = document.querySelectorAll(previewId);
+
    const file = imageInput.files[0];
 
    if (file) {
       const reader = new FileReader();
       reader.onload = function (e) {
-         preview.src = e.target.result;
-         preview.classList.remove("hidden");
+         previews.forEach((preview) => {
+            preview.src = e.target.result;
+            preview.classList.remove("hidden");
+         });
       };
       reader.readAsDataURL(file);
    }
+}
+
+function syncText(event, previewId, defaultText = "") {
+   const preview = document.getElementById(previewId);
+   preview.textContent = event.target.value || defaultText;
 }

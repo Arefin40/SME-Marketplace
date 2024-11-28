@@ -1,0 +1,65 @@
+{% extends "layouts/root_layout.html" %}
+{% load static %}
+
+{% block slot %}
+   <section class="p-3 col-start-2 col-span-1 bg-white flex-1 rounded-lg shadow-card overflow-hidden space-y-3">
+      <div class="rounded-lg border border-gray-200">
+         <div class="w-full aspect-[3/1] rounded-t-lg overflow-hidden bg-[#EAE9E5]">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5LYRg79Bcf8dcJVRwpZIa9iCr4nXvCdPnIQ&s"
+                 alt="Store cover"
+                 width="1280"
+                 height="720"
+                 class="w-full h-full object-cover" />
+         </div>
+
+         <header class="px-4 rounded-md">
+            <div class="flex items-end gap-x-8">
+               <!-- Logo -->
+               <div class="relative p-1 flex-shrink-0 w-48 rounded-full bg-white">
+                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5LYRg79Bcf8dcJVRwpZIa9iCr4nXvCdPnIQ&s"
+                       alt="Store logo"
+                       width="256"
+                       height="256"
+                       class="absolute left-0 bottom-0 size-48 object-cover overflow-hidden rounded-full border border-gray-200" />
+               </div>
+
+               <!-- Info -->
+               <div class="py-10 w-full flex flex-col gap-y-1.5 leading-none">
+                  <h2 class="text-2xl font-bold text-foreground">Store Name</h2>
+                  <div class="flex items-center gap-x-2">
+                     <p class="text-foreground">@shopname</p>
+                     <span class="size-1.5 rounded-full flex-shrink-0 bg-gray-300"></span>
+                     <p>
+                        <span class="font-semibold text-foreground">12K</span>
+                        <span>Followers</span>
+                     </p>
+                  </div>
+               </div>
+            </div>
+
+            <div class="px-3 mt-2 py-2 flex items-center justify-between gap-x-6 border-t border-gray-200">
+               <nav class="flex items-center gap-x-8">
+                  <a href="{% url 'home' %}" class="text-foreground">Home</a>
+                  <a href="{% url 'home' %}" class="text-gray-600">Collections</a>
+                  <a href="{% url 'home' %}" class="text-gray-600">About</a>
+               </nav>
+               <button class="font-semibold bg-primary text-white px-4 py-2 rounded-lg">Follow</button>
+            </div>
+         </header>
+      </div>
+
+      <main class="space-y-6 rounded-lg">
+         {% block storefront %}
+            <div class="p-4 text-lg font-semibold bg-white rounded-md space-y-4 border border-gray-100">
+               <h2 class="text font-bold text-foreground">Collection Name</h2>
+               <main class="grid grid-cols-4 gap-x-5 text-sm">
+                  {% include "snippets/MinimalProductCard.html" %}
+                  {% include "snippets/MinimalProductCard.html" %}
+                  {% include "snippets/MinimalProductCard.html" %}
+                  {% include "snippets/MinimalProductCard.html" %}
+               </main>
+            </div>
+         {% endblock storefront %}
+      </main>
+   </section>
+{% endblock slot %}
