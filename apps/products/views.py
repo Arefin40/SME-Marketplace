@@ -15,10 +15,11 @@ def all_products(request):
 
 def product_details(request, p_id):
     p = Product.objects.get(pk=p_id)
+    prodImg = ProductImage.objects.filter(product=p)
     p.description = markdown.markdown(
         convert_to_markdown_table(p.description), extensions=["markdown.extensions.tables"]
     )
-    return render(request, "product_details.html", {"p": p})
+    return render(request, "product_details.html", {"p": p, "prodImg": prodImg})
 
 
 @role_required(["MERCHANT"])
