@@ -1,6 +1,10 @@
+import markdown
+from django.contrib import messages
 from django.shortcuts import redirect, render
-
-from apps.products.models import Product
+from apps.users.decorators import role_required
+from apps.stores.models import Collection
+from .models import Product, ProductImage
+from .forms import ProductForm
 
 
 # Create your views here.
@@ -9,9 +13,12 @@ def all_products(request):
     return render(request, "all_products.html", {"products": products})
 
 
-def product_details(request,p_id):
-    p = Product.objects.get(pk = p_id)
-    return render(request, "product_details.html",{"p":p})
+def product_details(request, p_id):
+    p = Product.objects.get(pk=p_id)
+    p.description = markdown.markdown(
+        convert_to_markdown_table(p.description), extensions=["markdown.extensions.tables"]
+    )
+    return render(request, "product_details.html", {"p": p})
 
 
 def add_product(request):
@@ -25,21 +32,15 @@ def add_product(request):
             sku = request.POST.get("sku")
             image = request.FILES.get("image")
 
-            if not all([name, price, stock, sku, image]):
-                raise ValueError("Required fields are missing")
 
-            Product.objects.create(
-                name=name,
-                category=category,
-                description=description,
-                price=price,
-                stock=stock,
-                sku=sku,
-                image=image,
-            )
-            return redirect("/")
-        except ValueError as v:
-            return render(request, "add_product.html", {"error": str(v)})
-        except Exception:
-            return render(request, "add_product.html", {"error": "An error occurred while saving the product"})
-    return render(request, "add_product.html")
+
+def convert_to_markdown_table(textarea_input):
+    rows = textarea_input.strip().split("\n")
+    table = "| Feature | Description |\n| -- | -- |\n"
+
+    for row in rows:
+        if ":" in row:
+            key, values = row.split(":", 1)
+            values = values.strip().replace("|", "<br>")
+            table += f"| **{key.strip()}** | {values} |\n"
+    return table

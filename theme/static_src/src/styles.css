@@ -33,6 +33,14 @@
       @apply px-3 flex h-11 w-full rounded-md border border-input bg-background py-2 text-sm text-foreground ring-offset-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50;
    }
 
+   textarea.input {
+      @apply h-auto;
+   }
+
+   textarea.input.no-ring {
+      @apply focus-visible:ring-0 border-transparent;
+   }
+
    [data-password="hidden"] > g:nth-child(1) {
       @apply hidden;
    }

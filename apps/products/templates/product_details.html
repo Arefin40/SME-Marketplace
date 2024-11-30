@@ -1,47 +1,39 @@
 {% extends "layouts/root_layout.html" %}
 {% block slot %}
     <main class="p-6 col-start-2 col-span-1 bg-white flex-1 rounded-lg shadow-card">
-        <section>
-            <div class="w-full  grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="flex gap-3 w-full">
-                    <div class="flex flex-col gap-2">
-                        <div class="bg-gray-200 rounded-lg h-[125px] w-[125px] border">
-                            <img height="full"
-                                 width="full"
-                                 src="{{ p.image.url }}"
-                                 alt="{{ p.name }}"
-                                 class="h-full w-full object-cover rounded-lg">
-                        </div>
-                        <div class="bg-gray-200 rounded-lg h-[125px] w-[125px] border">
-                            <img height="full"
-                                 width="full"
-                                 src="{{ p.image.url }}"
-                                 alt="{{ p.name }}"
-                                 class="h-full w-full object-cover rounded-lg">
-                        </div>
-                        <div class="bg-gray-200 rounded-lg h-[125px] w-[125px] border">
-                            <img height="full"
-                                 width="full"
-                                 src="{{ p.image.url }}"
-                                 alt="{{ p.name }}"
-                                 class="h-full w-full object-cover rounded-lg">
-                        </div>
-                        
-                    </div>
-                    <div class="max-h-[450px] max-w-[400px] rounded-xl w-full p-6 border">
-                        <img height="full"
-                             width="full"
-                             src="{{ p.image.url }}"
-                             alt="{{ p.name }}"
-                             class="h-full w-full object-cover">
-                    </div>
+        <div class="w-full  grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex gap-3 w-full">
+                <div class="w-36 flex flex-col gap-2">
+                    <img height="full"
+                         width="full"
+                         src="{{ p.image.url }}"
+                         alt="{{ p.name }}"
+                         class="object-cover rounded-lg border border-gray-100" />
+                    <img height="full"
+                         width="full"
+                         src="{{ p.image.url }}"
+                         alt="{{ p.name }}"
+                         class="object-cover rounded-lg border border-gray-100" />
+                    <img height="full"
+                         width="full"
+                         src="{{ p.image.url }}"
+                         alt="{{ p.name }}"
+                         class="object-cover rounded-lg border border-gray-100" />
                 </div>
-                <div class="flex flex-col justify-between">
-                    <h1 class="text-2xl font-bold text-black">{{ p.name }}</h1>
-                    <p class="my-6 text-xl text-gray-800 font-semibold">{{ p.price }} TK</p>
-                    <div class="text-md">
-                        <p class="mb-2">
-                            Stock : <span class="text-green-500">
+                <div class="aspect-[1/1] rounded-xl w-full border border-gray-100 overflow-hidden">
+                    <img height="full"
+                         width="full"
+                         src="{{ p.image.url }}"
+                         alt="{{ p.name }}"
+                         class="h-full w-full object-cover" />
+                </div>
+            </div>
+            <div class="flex flex-col justify-between">
+                <h1 class="text-2xl font-bold text-foreground">{{ p.name }}</h1>
+                <p class="my-6 text-xl text-foreground font-semibold">{{ p.price }} TK</p>
+                <div class="text-md">
+                    <p class="mb-2">
+                        <span class="font-semibold text-foreground">Stock</span> : <span class="text-green-600">
                             {% if p.stock > 0 %}
                                 Available
                             {% else %}
@@ -49,69 +41,51 @@
                             {% endif %}
                         </span>
                     </p>
-                    <p>SKU : {{ p.sku }}</p>
+                    <p>
+                        <span class="font-semibold text-foreground">SKU</span> : {{ p.sku }}
+                    </p>
                 </div>
-                <div class="flex gap-3 my-6">
-                    <button class="bg-blue-400 text-white text-sm font-semibold rounded-full px-6 py-2 flex justify-center items-center gap-2 ">
-                        {% include "icons/shoppingCart.html" %}
+                <div class="flex gap-3 my-6 font-semibold">
+                    <button class="bg-primary hover:bg-primary/90 text-white rounded-full px-6 py-3 flex justify-center items-center gap-2 ">
+                        {% include "icons/ShoppingCart.html" %}
                         Add to Cart
                     </button>
-                    <button class="bg-gray-300 text-black text-sm font-semibold rounded-full px-6 py-2 flex justify-center items-center gap-2 ">
+                    <button class="bg-gray-200 hover:bg-foreground text-gray-600 hover:text-white rounded-full px-6 py-3 flex justify-center items-center gap-2 group">
                         {% include "icons/love_sign.html" %}
-                        Add to Cart
+                        Add to Wishlist
                     </button>
                 </div>
-                <div class="flex gap-6 items-center mt-12">
-                    <div class="h-[64px] w-[64px] rounded-full bg-gray-200"></div>
-                    <div>
-                        <p class="text-md font-bold text-gray-800">Arefin er Dokan</p>
-                        <p class="text-sm font-bold">12K Followers</p>
+                <div class="flex">
+                    <div class="inline-flex pt-4 pr-6 gap-6 items-center border-t border-gray-200">
+                        <img src="{{ p.collection.store.logo.url }}"
+                             alt="{{ p.collection.store.name }}"
+                             width="64"
+                             height="64"
+                             class="size-16 rounded-full bg-gray-200 flex-shrink-0" />
+                        <div>
+                            <p class="text-md font-bold text-gray-800">{{ p.collection.store.name }}</p>
+                            <p class="text-sm font-bold">{{ p.collection.store.followers.count }} Followers</p>
+                        </div>
+                        <form method="post"
+                              action="{% url 'toggle-follow-store' p.collection.store.slug %}">
+                            {% csrf_token %}
+                            <button class="font-semibold text-sm {% if request.user in p.collection.store.followers.all %}bg-muted text-foreground{% else %}bg-foreground text-white{% endif %} text-lg px-5 py-2 rounded-full">
+                                {% if request.user in p.collection.store.followers.all %}
+                                    Following
+                                {% else %}
+                                    Follow
+                                {% endif %}
+                            </button>
+                        </form>
                     </div>
-                    <button class="bg-black rounded-full px-6 py-2 text-white font-semibold">Follow</button>
                 </div>
             </div>
         </div>
         <div class="p-6 rounded-md my-6 md:my-12">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4">Product Details</h2>
-            <table class="w-full text-left text-gray-800">
-                <tbody>
-                    <tr class=" ">
-                        <th class="py-2 pr-4 text-gray-500 font-medium w-1/3">Type</th>
-                        <td class="py-2">Full-sleeved traditional Panjabi.</td>
-                    </tr>
-                    <tr class=" ">
-                        <th class="py-2 pr-4 text-gray-500 font-medium">Embroidery</th>
-                        <td class="py-2">Subtle, intricate hand-embroidered detailing along the collar and cuffs.</td>
-                    </tr>
-                    <tr class=" ">
-                        <th class="py-2 pr-4 text-gray-500 font-medium">Neckline</th>
-                        <td class="py-2">Mandarin collar (banded collar) with handmade fabric buttons.</td>
-                    </tr>
-                    <tr class=" ">
-                        <th class="py-2 pr-4 text-gray-500 font-medium">Fit</th>
-                        <td class="py-2">Regular fit with comfortable side slits for ease of movement.</td>
-                    </tr>
-                    <tr class=" ">
-                        <th class="py-2 pr-4 text-gray-500 font-medium">Color</th>
-                        <td class="py-2">Classic White.</td>
-                    </tr>
-                    <tr class=" ">
-                        <th class="py-2 pr-4 text-gray-500 font-medium">Length</th>
-                        <td class="py-2">Knee-length traditional cut.</td>
-                    </tr>
-                    <tr>
-                        <th class="py-2 pr-4 text-gray-500 font-medium">Material</th>
-                        <td class="py-2">
-                            100% Pure Cotton
-                            <br>
-                            Lightweight, breathable fabric perfect for year-round wear.
-                            <br>
-                            Handwoven by skilled artisans to ensure premium quality and durability.
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <h2 class="text-lg font-bold text-gray-900 mb-4">Product Details</h2>
+            <div class="markdown-content prose prose-h1:text-xl prose-h1:text-foreground prose-h1:font-bold prose-h1:mb-2 prose-ul:mt-2 prose-li:my-1 prose-th:font-bold prose-tr:border-gray-100">
+                {{ p.description|safe }}
+            </div>
         </div>
-    </section>
-</main>
+    </main>
 {% endblock slot %}
