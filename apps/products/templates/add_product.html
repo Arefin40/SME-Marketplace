@@ -1,130 +1,194 @@
-{% extends "layouts/root_layout.html" %}
-{% block slot %}
-   <main class="p-6 col-start-2 col-span-1 bg-white flex-1 rounded-lg shadow-card">
-      <div class="mb-8 flex flex-col items-center text-center">
-         <h1 class="text-2xl font-bold text-gray-900">Add New Product</h1>
-         <p class="mt-2 text-sm text-gray-600">Fill in the details below to add a new product to your inventory.</p>
-      </div>
-      {% if error %}
-         <div class="flex justify-center">
-            <p class="text-red-500">{{ error }}</p>
+{% extends "layouts/dashboard_layout.html" %}
+{% load static %}
+
+{% block main %}
+   <form method="post"
+         enctype="multipart/form-data"
+         class="p-4 space-y-5 col-start-2 col-span-1 bg-white/30 backdrop-blur-xl flex flex-col flex-1 rounded-lg shadow-card">
+      {% csrf_token %}
+      <header class="flex items-center justify-between">
+         <div class="space-y-3">
+            <h2 class="text-foreground text-xl font-bold leading-tight">Add Product</h2>
+            <p>Add a new product to your store</p>
          </div>
-         
-      {% endif %}
-      <form method="post"
-            enctype="multipart/form-data"
-            class="max-w-2xl mx-auto space-y-6">
-         {% csrf_token %}
-         <div class="space-y-4">
-            <div>
-               <label class="block text-sm font-medium text-gray-700">Product Name</label>
-               <input type="text"
-                      name="name"
-                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                      required>
-            </div>
-            <div>
-               <label class="block text-sm font-medium text-gray-700">Category</label>
-               <input type="text"
-                      name="category"
-                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-            </input>
-         </div>
-         <div>
-            <label class="block text-sm font-medium text-gray-700">Description</label>
-            <textarea name="description"
-                      rows="4"
-                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"></textarea>
-         </div>
-         <div class="flex gap-4 w-full">
-            <div class="w-1/2">
-               <label class="block text-sm font-medium text-gray-700">Price</label>
-               <div class="mt-1 relative rounded-md shadow-sm">
-                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                     <span class="text-gray-500 sm:text-sm">$</span>
+
+         <button type="submit"
+                 class="btn btn-primary rounded-lg hover:shadow-lg hover:shadow-primary/30 hover:button-primary">
+            Save Draft
+         </button>
+      </header>
+
+      <main class="flex-1 grid gap-3 grid-cols-[1fr,24rem]">
+         <section class="h-full space-y-3">
+            <!-- General Information -->
+            <div class="rounded-lg bg-white border border-gray-100 shadow-card">
+               <header class="px-4 py-3 border-b border-gray-100 text-foreground font-semibold">
+                  General Information
+               </header>
+               <main class="px-4 py-3 space-y-5">
+                  <div class="space-y-2">
+                     <label for="{{ form.name.id_for_label }}">Name</label>
+                     {{ form.name }}
+                     {% if form.name.errors %}<p class="text-red-500 text-sm">{{ form.name.errors.0 }}</p>{% endif %}
                   </div>
-                  <input type="number"
-                         name="price"
-                         step="0.01"
-                         class="pl-7 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                         required>
+
+                  <div class="grid grid-cols-[1fr,1fr,2fr] gap-3">
+                     <div class="space-y-2">
+                        <label for="{{ form.price.id_for_label }}">Price</label>
+                        {{ form.price }}
+                        {% if form.price.errors %}<p class="text-red-500 text-sm">{{ form.price.errors.0 }}</p>{% endif %}
+                     </div>
+
+                     <div class="space-y-2">
+                        <label for="{{ form.stock.id_for_label }}">Stock</label>
+                        {{ form.stock }}
+                        {% if form.stock.errors %}<p class="text-red-500 text-sm">{{ form.stock.errors.0 }}</p>{% endif %}
+                     </div>
+
+                     <div class="space-y-2">
+                        <label for="{{ form.sku.id_for_label }}">SKU</label>
+                        {{ form.sku }}
+                        {% if form.sku.errors %}<p class="text-red-500 text-sm">{{ form.sku.errors.0 }}</p>{% endif %}
+                     </div>
+                  </div>
+
+               </main>
+            </div>
+
+            <!-- Description -->
+            <div class="rounded-lg bg-white border border-gray-100 shadow-card">
+               <label for="{{ form.description.id_for_label }}"
+                      class="block px-4 py-3 border-b text-base border-gray-100 text-foreground font-semibold">
+                  Description
+               </label>
+
+               <div class="space-y-2 overflow-hidden">
+                  {{ form.description }}
+                  {% if form.description.errors %}<p class="text-red-500 text-sm">{{ form.description.errors.0 }}</p>{% endif %}
                </div>
             </div>
-            <div class="w-1/2">
-               <label class="block text-sm font-medium text-gray-700">Stock Quantity</label>
-               <input type="number"
-                      name="stock"
-                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                      required>
-            </div>
-         </div>
-         <div>
-            <label class="block text-sm font-medium text-gray-700">SKU</label>
-            <input type="text"
-                   name="sku"
-                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-         </div>
-         <div>
-            <label class="block text-sm font-medium text-gray-700">Product Image</label>
-            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-               <div class="space-y-1 text-center">
-                  <svg class="mx-auto h-12 w-12 text-gray-400"
-                       stroke="currentColor"
-                       fill="none"
-                       viewBox="0 0 48 48">
-                     <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                  <div class="flex text-sm text-gray-600">
-                     <label for="file-upload"
-                            class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                        <span>Upload a file</span>
-                        <input id="file-upload"
-                               name="image"
-                               type="file"
-                               class="sr-only"
-                               accept="image/*">
-                     </label>
-                     <p class="pl-1">or drag and drop</p>
+         </section>
+
+         <section class="h-full space-y-5">
+            <!-- Images -->
+            <div class="rounded-lg bg-white border border-gray-100 shadow-card">
+               <header class="px-4 py-3 border-b border-gray-100 text-foreground font-semibold">
+                  Images
+               </header>
+
+               <main class="p-4 space-y-2 text-sm">
+                  <div class="relative min-h-28 flex-center rounded-lg overflow-hidden">
+                     <div class="absolute inset-0 flex-center pointer-events-none bg-gray-100 rounded-lg">
+                        <div class="space-y-1 text-center">
+                           <img src="{% static 'images/uploadImage.svg' %}"
+                                height="32"
+                                width="32"
+                                class="mx-auto h-8 w-8 text-gray-400 pointer-events-none"
+                                alt="Upload icon" />
+
+                           <p class="pointer-events-none text-sm text-center w-full">Upload main image</p>
+                           <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB each</p>
+                        </div>
+                     </div>
+
+                     {{ form.image }}
+
+                     <img src="https://assets.myntassets.com/dpr_1.5,q_60,w_400,c_limit,fl_progressive/assets/images/30106032/2024/11/6/7c1bab30-d3cb-41c5-9211-f4e0f4e50aa01730891681295-ADIDAS-Men-Tracksuits-4001730891680664-1.jpg"
+                          width="512"
+                          height="512"
+                          alt="Product image preview"
+                          class="hidden main-image-preview w-full rounded-md object-contain relative pointer-events-none" />
                   </div>
-                  <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
-               </div>
+
+                  <div class="relative h-28 w-full overflow-hidden space-y-2">
+                     <div id="imagePreviewContainer"
+                          class="hidden h-full grid-cols-3 justify-center gap-x-2"></div>
+
+                     <input type="file"
+                            name="images"
+                            id="id_images"
+                            accept="image/*"
+                            multiple
+                            onchange="displayImages(this)"
+                            class="absolute inset-0 opacity-0" />
+
+                     <div class="p-6 h-full flex-center gap-x-2 rounded-md overflow-hidden bg-gray-100">
+                        <img src="{% static 'images/uploadImage.svg' %}"
+                             height="24"
+                             width="24"
+                             class="size-6 text-gray-400 pointer-events-none"
+                             alt="Upload icon" />
+                        <p>Add more images (max 3)</p>
+                     </div>
+                  </div>
+                  <p id="imageError" class="text-red-500 text-sm hidden">Maximum 3 additional images allowed</p>
+               </main>
             </div>
-         </div>
-      </div>
-      <div class="pt-5">
-         <div class="flex justify-end">
-            <button type="submit"
-                    class="px-4 py-2 rounded-md bg-primary text-sm text-primary-foreground font-semibold active:scale-95 transition-transform">
-               Save Product
-            </button>
-         </div>
-      </div>
+
+            <!-- Categorory -->
+            <div class="rounded-lg bg-white border border-gray-100 shadow-card">
+               <header class="px-4 py-3 border-b border-gray-100 text-foreground font-semibold">
+                  Categorory
+               </header>
+               <main class="px-4 py-3 space-y-5">
+                  <div class="space-y-2">
+                     <label for="{{ form.category.id_for_label }}">Category</label>
+                     {{ form.category }}
+                  </div>
+
+                  <div class="space-y-2">
+                     <label for="{{ form.collection.id_for_label }}">Collection</label>
+                     {{ form.collection }}
+                     {% if form.collection.errors %}<p class="text-red-500 text-sm">{{ form.collection.errors.0 }}</p>{% endif %}
+                     <div class="mt-2">
+                        <label for="{{ form.new_collection_name.id_for_label }}">Or create new collection</label>
+                        {{ form.new_collection_name }}
+                        {% if form.new_collection_name.errors %}
+                           <p class="text-red-500 text-sm">{{ form.new_collection_name.errors.0 }}</p>
+                        {% endif %}
+                     </div>
+                  </div>
+               </main>
+            </div>
+         </section>
+      </main>
    </form>
+{% endblock main %}
 
-   <!-- Success Modal -->
-   <div id="successModal" class="fixed inset-0 z-50 hidden">
-      <div class="fixed inset-0 bg-black/30 backdrop-blur-sm"></div>
-      <div class="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm p-6 bg-white rounded-lg shadow-xl opacity-0 transition-opacity duration-300">
-         <div class="text-center space-y-4">
-            <!-- Success Icon -->
-            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-               <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-               </svg>
-            </div>
-            
-            <h3 class="text-lg font-medium text-gray-900">Product Added Successfully!</h3>
-            <p class="text-sm text-gray-500">Your product has been successfully added to the store.</p>
-            
-            <div class="mt-5">
-               <button type="button" onclick="closeModal()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:text-sm">
-                  Close
-               </button>
-            </div>
-         </div>
-      </div>
-   </div>
+{% block scripts %}
+   <script>
+   function displayImages(input) {
+      const container = document.getElementById('imagePreviewContainer');
+      const imageError = document.getElementById('imageError');
+      
+      container.innerHTML = '';
 
- 
-</main>
-{% endblock slot %}
+      if (input.files.length > 3) {
+         input.value = '';
+         imageError.classList.remove('hidden');
+         container.classList.add('hidden');
+         return;
+      }
+
+      if (input.files.length === 0) {
+         container.classList.add('hidden');
+         return;
+      }
+
+      container.classList.remove('hidden');
+      container.classList.add('grid');
+
+      Array.from(input.files).forEach(file => {
+         const reader = new FileReader();
+         const div = document.createElement('div');
+         div.className = 'aspect-[1/1] bg-gray-100 rounded-md overflow-hidden';
+         
+         reader.onload = e => {
+            div.innerHTML = `<img width="84" height="84" src="${e.target.result}" class="size-full object-cover" />`;
+            container.appendChild(div);
+         };
+         reader.readAsDataURL(file);
+      });
+   }
+   </script>
+{% endblock scripts %}

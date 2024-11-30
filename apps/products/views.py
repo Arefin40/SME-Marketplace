@@ -21,17 +21,42 @@ def product_details(request, p_id):
     return render(request, "product_details.html", {"p": p})
 
 
+@role_required(["MERCHANT"])
 def add_product(request):
-    if request.method == "POST":
-        try:
-            name = request.POST.get("name")
-            category = request.POST.get("category")
-            description = request.POST.get("description")
-            price = request.POST.get("price")
-            stock = request.POST.get("stock")
-            sku = request.POST.get("sku")
-            image = request.FILES.get("image")
+    if not request.user.stores.exists():
+        messages.error(request, "You need to create a store first before adding products.")
+        return redirect("create-store")
 
+    if request.method == "POST":
+        form = ProductForm(request.POST, request.FILES, user=request.user)
+
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.store = request.user.stores.first()
+
+            # Create new collection if specified
+            collection = form.cleaned_data.get("collection")
+            new_collection_name = form.cleaned_data.get("new_collection_name")
+
+            if not collection and new_collection_name:
+                product.collection = Collection.objects.create(
+                    name=new_collection_name, store=product.store
+                )
+            else:
+                product.collection = collection
+
+            product.save()
+
+            # Save additional product images
+            for image in request.FILES.getlist("images"):
+                ProductImage.objects.create(product=product, image=image)
+
+            messages.success(request, "Product added successfully!")
+            return redirect("manage-inventory")
+    else:
+        form = ProductForm(user=request.user)
+
+    return render(request, "add_product.html", {"form": form})
 
 
 def convert_to_markdown_table(textarea_input):
