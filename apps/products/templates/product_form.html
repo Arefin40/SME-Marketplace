@@ -8,8 +8,20 @@
       {% csrf_token %}
       <header class="flex items-center justify-between">
          <div class="space-y-3">
-            <h2 class="text-foreground text-xl font-bold leading-tight">Add Product</h2>
-            <p>Add a new product to your store</p>
+            <h2 class="text-foreground text-xl font-bold leading-tight">
+               {% if update %}
+                  Update Product
+               {% else %}
+                  Add Product
+               {% endif %}
+            </h2>
+            <p>
+               {% if update %}
+                  Update product details and information
+               {% else %}
+                  Add a new product to your store
+               {% endif %}
+            </p>
          </div>
 
          <button type="submit"
@@ -93,11 +105,11 @@
 
                      {{ form.image }}
 
-                     <img src="https://assets.myntassets.com/dpr_1.5,q_60,w_400,c_limit,fl_progressive/assets/images/30106032/2024/11/6/7c1bab30-d3cb-41c5-9211-f4e0f4e50aa01730891681295-ADIDAS-Men-Tracksuits-4001730891680664-1.jpg"
+                     <img src="{{ form.image.value.url }}"
                           width="512"
                           height="512"
                           alt="Product image preview"
-                          class="hidden main-image-preview w-full rounded-md object-contain relative pointer-events-none" />
+                          class="{% if not update %}hidden{% endif %} main-image-preview w-full rounded-md object-contain relative pointer-events-none" />
                   </div>
 
                   <div class="relative h-28 w-full overflow-hidden space-y-2">
