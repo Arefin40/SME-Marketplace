@@ -54,3 +54,10 @@ def delete_post(request, pk):
     post = Post.objects.get(pk=pk)
     post.delete()
     return redirect("manage-posts")
+
+
+@role_required(["MERCHANT"])
+def manage_posts(request):
+    store = Store.objects.get(merchant=request.user)
+    posts = Post.objects.filter(store=store)
+    return render(request, "manage-posts.html", {"posts": posts})

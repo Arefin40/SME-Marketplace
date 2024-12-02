@@ -1,0 +1,94 @@
+{% extends "layouts/dashboard_layout.html" %}
+{% load static %}
+
+{% block main %}
+   <div class="p-4 space-y-5 col-start-2 col-span-1 bg-white/30 backdrop-blur-xl flex flex-col flex-1 rounded-lg shadow-card">
+      <header class="flex items-center justify-between">
+         <div class="space-y-3">
+            <h2 class="text-foreground text-xl font-bold leading-tight">Manage Posts</h2>
+            <p>View and manage your social posts</p>
+         </div>
+
+         <a href="{% url 'create-post' %}"
+            class="btn btn-primary rounded-lg hover:shadow-lg hover:shadow-primary/30 hover:button-primary">
+            <span>Create Post</span>
+            {% include "icons/PaperPlane.html" %}
+         </a>
+      </header>
+
+      <main class="flex-1">
+         {% if posts %}
+            <div class="bg-white rounded-lg border border-gray-100 shadow-card overflow-hidden">
+               <table class="w-full text-sm">
+                  <thead>
+                     <tr class="border-b border-gray-100 bg-gray-50 text-left">
+                        <th class="p-4">Description</th>
+                        <th class="p-4 text-center">Products</th>
+                        <th class="p-4 text-center">Likes</th>
+                        <th class="p-4 text-center">Posted</th>
+                        <th class="p-4 text-center">Actions</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     {% for post in posts %}
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                           <td class="p-4 max-w-[16rem]">
+                              <p class="truncate w-full">{{ post.description }}</p>
+                           </td>
+
+                           <td class="p-4 text-center">
+                              {% if post.products.exists %}
+                                 <div class="flex-center -space-x-2">
+                                    {% for product in post.products.all %}
+                                       <img src="{{ product.image.url }}"
+                                            alt="{{ product.name }}"
+                                            class="size-9 rounded-full border-2 border-white object-cover"
+                                            width="36"
+                                            height="36" />
+                                    {% endfor %}
+                                 </div>
+                              {% else %}
+                                 <span class="text-gray-500">No products</span>
+                              {% endif %}
+                           </td>
+
+                           <td class="p-4">
+                              <div class="flex-center gap-x-1">
+                                 {% include "icons/love_sign.html" with class="size-4" %}
+                                 <span>{{ post.total_likes }}</span>
+                              </div>
+                           </td>
+                           <td class="p-4 text-gray-500 text-center">{{ post.created_at|timesince }} ago</td>
+                           <td class="p-4">
+                              <div class="flex-center gap-x-2">
+                                 <a href="{% url 'edit-post' post.pk %}"
+                                    class="p-2 bg-gray-100 hover:bg-gray-200 hover:text-foreground rounded-full">
+                                    {% include "icons/Pencil.html" with class="size-4" %}
+                                 </a>
+                                 <a href="{% url 'delete-post' post.pk %}"
+                                    class="p-2 bg-gray-100 hover:bg-gray-200 hover:text-red-500 rounded-full">
+                                    {% include "icons/Trash.html" %}
+                                 </a>
+                              </div>
+                           </td>
+                        </tr>
+                     {% endfor %}
+                  </tbody>
+               </table>
+            </div>
+         {% else %}
+            <div class="h-full flex-center">
+               <div class="text-center space-y-4">
+                  <div class="flex-center">{% include "icons/Post.html" with class="size-16" %}</div>
+                  <h3 class="text-lg font-medium text-foreground">No Posts Yet</h3>
+                  <p class="text-gray-500">Create your first post to engage with customers</p>
+                  <a href="{% url 'create-post' %}"
+                     class="btn btn-primary rounded-lg inline-flex hover:shadow-lg hover:shadow-primary/30">
+                     Create Post
+                  </a>
+               </div>
+            </div>
+         {% endif %}
+      </main>
+   </div>
+{% endblock main %}
