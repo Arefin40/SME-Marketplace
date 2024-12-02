@@ -11,7 +11,16 @@ from .forms import ProductForm
 # Create your views here.
 def all_products(request):
     products = Product.objects.all()
-    return render(request, "all_products.html", {"products": products})
+    wishlist_products = request.user.wishlist_items.values_list("product_id", flat=True)
+
+    # Handle search query
+    query = request.GET.get("q")
+    if query:
+        products = products.filter(name__icontains=query)
+
+    return render(
+        request, "all_products.html", {"products": products, "wishlist_products": wishlist_products}
+    )
 
 
 def product_details(request, p_id):
