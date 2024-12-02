@@ -105,7 +105,7 @@ class Area(models.Model):
     district = models.ForeignKey(Zone, related_name="thanas", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.district.name} - {self.name}"
+        return self.name
 
 
 class Address(models.Model):

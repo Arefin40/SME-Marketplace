@@ -2,15 +2,14 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from apps.products.models import Product
-from .models import CartItem
+from .forms import CheckoutForm
 
 
 # Create your views here.
 @login_required
 def cart(request):
     user = request.user
-    cart_items = CartItem.objects.filter(user=user)
-    total_price = sum(item.get_total_price() for item in cart_items)
+    cart_items, total_price = get_cart_items_and_total_price(user)
     return render(
         request, "shopping_cart.html", {"cart_items": cart_items, "total_price": total_price}
     )
@@ -52,3 +51,31 @@ def clear_cart(request):
     user = request.user
     CartItem.objects.filter(user=user).delete()
     return redirect("cart")
+
+
+@login_required
+def checkout(request):
+    user = request.user
+    addresses = user.addresses.all()
+    cart_items, total_price = get_cart_items_and_total_price(user)
+
+    form = CheckoutForm()
+    return render(
+        request,
+        "checkout.html",
+        {
+            "addresses": addresses,
+            "form": form,
+            "total_price": total_price,
+            "shipping_price": 60,
+            "grand_total": total_price + 60,
+        },
+    )
+
+
+
+
+def get_cart_items_and_total_price(user):
+    cart_items = CartItem.objects.filter(user=user)
+    total_price = sum(item.get_total_price() for item in cart_items)
+    return cart_items, total_price

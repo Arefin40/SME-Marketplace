@@ -1,0 +1,256 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+   <div class="relative flex flex-col h-screen w-screen overflow-hidden">
+      <section class="p-3 h-full grid grid-cols-[20rem,1fr] flex-1 overflow-hidden">
+         {% include "snippets/sidebar.html" %}
+
+         <form method="post"
+               action="{% url 'place-order' %}"
+               class="col-start-2 col-span-1 h-full grid grid-cols-[1fr,20rem] gap-x-3 overflow-hidden shadow-card">
+            {% csrf_token %}
+            <!-- Main Content -->
+            <main class="space-y-3 overflow-y-auto scroll-hide rounded-lg">
+               <div class="p-6 space-y-4 bg-white rounded-lg shadow-card">
+                  <h1 class="font-bold text-lg text-foreground">Shipping Address</h1>
+
+                  <div class="flex gap-x-2.5 overflow-x-auto scroll-hide">
+                     <button type="button" class="flex-center px-2 border rounded-lg">{% include "icons/Plus.html" %}</button>
+                     {% for address in addresses %}
+                        <div class="p-3 w-56 rounded-lg border text-sm space-y-2.5 text-foreground group flex-shrink-0 scroll-hide cursor-pointer hover:border-primary"
+                             onclick="fillAddressForm('Shipping', '{{ address.address }}', '{{ address.area_fk.pk }}', '{{ address.zone_fk.pk }}', '{{ address.contact }}')">
+                           <h1 class="font-semibold text-foreground">{{ address.label }}</h1>
+                           <p>
+                              {{ address.address }}
+                              <br />
+                              {{ address.area_fk.name }}, {{ address.zone_fk.name }}
+                           </p>
+                           <p class="text-muted-foreground">{{ address.contact }}</p>
+                        </div>
+                     {% endfor %}
+                  </div>
+
+                  <div class="space-y-4">
+                     <div class="grid grid-cols-2 gap-4">
+                        <div>
+                           {{ form.shipping_name.label_tag }}
+                           {{ form.shipping_name }}
+                           {{ form.shipping_name.errors }}
+                        </div>
+                        <div>
+                           {{ form.shipping_contact.label_tag }}
+                           {{ form.shipping_contact }}
+                           {{ form.shipping_contact.errors }}
+                        </div>
+                     </div>
+
+                     <div>
+                        {{ form.shipping_address.label_tag }}
+                        {{ form.shipping_address }}
+                        {{ form.shipping_address.errors }}
+                     </div>
+
+                     <div class="grid grid-cols-2 gap-4">
+                        <div>
+                           {{ form.shipping_zone.label_tag }}
+                           {{ form.shipping_zone }}
+                           {{ form.shipping_zone.errors }}
+                        </div>
+                        <div>
+                           {{ form.shipping_area.label_tag }}
+                           {{ form.shipping_area }}
+                           {{ form.shipping_area.errors }}
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="space-y-3 p-6 bg-white rounded-lg shadow-card">
+                  <h2 class="font-bold text-lg text-foreground">Billing Address</h2>
+
+                  <div class="flex gap-x-2.5 overflow-x-auto scroll-hide">
+                     <button type="button" class="flex-center px-2 border rounded-lg">{% include "icons/Plus.html" %}</button>
+                     {% for address in addresses %}
+                        <div class="p-3 w-56 rounded-lg border text-sm space-y-2.5 text-foreground group flex-shrink-0 scroll-hide cursor-pointer hover:border-primary"
+                             onclick="fillAddressForm('Billing', '{{ address.address }}', '{{ address.area_fk.pk }}', '{{ address.zone_fk.pk }}', '{{ address.contact }}')">
+                           <h1 class="font-semibold text-foreground">{{ address.label }}</h1>
+                           <p>
+                              {{ address.address }}
+                              <br />
+                              {{ address.area_fk.name }}, {{ address.zone_fk.name }}
+                           </p>
+                           <p class="text-muted-foreground">{{ address.contact }}</p>
+                        </div>
+                     {% endfor %}
+                  </div>
+
+                  <div class="grid grid-cols-2 gap-4">
+                     <div>
+                        {{ form.billing_name.label_tag }}
+                        {{ form.billing_name }}
+                        {{ form.billing_name.errors }}
+                     </div>
+                     <div>
+                        {{ form.billing_contact.label_tag }}
+                        {{ form.billing_contact }}
+                        {{ form.billing_contact.errors }}
+                     </div>
+                  </div>
+
+                  <div class="mt-4">
+                     {{ form.billing_address.label_tag }}
+                     {{ form.billing_address }}
+                     {{ form.billing_address.errors }}
+                  </div>
+
+                  <div class="grid grid-cols-2 gap-4 mt-4">
+                     <div>
+                        {{ form.billing_zone.label_tag }}
+                        {{ form.billing_zone }}
+                        {{ form.billing_zone.errors }}
+                     </div>
+                     <div>
+                        {{ form.billing_area.label_tag }}
+                        {{ form.billing_area }}
+                        {{ form.billing_area.errors }}
+                     </div>
+                  </div>
+               </div>
+
+               <div class="p-6 bg-white rounded-lg shadow-card">
+                  <h2 class="font-bold text-lg text-foreground mb-4">Shipping Method</h2>
+
+                  <div class="grid grid-cols-2 gap-4">
+                     {% for radio in form.shipping_method %}
+                        <label class="block cursor-pointer group">
+                           {{ radio.tag }}
+                           <div class="flex items-center p-2 rounded-xl border peer-checked:border-primary ring-1 ring-transparent peer-checked:ring-primary">
+                              <div class="flex-shrink-0 size-12 flex items-center justify-center rounded-lg bg-primary/10 text-primary">
+                                 {% if radio.data.value == 'EXPRESS' %}
+                                    {% include "icons/ExpressDelivery.html" %}
+                                 {% else %}
+                                    {% include "icons/StandardDelivery.html" %}
+                                 {% endif %}
+                              </div>
+                              <div class="ml-4 space-y-1">
+                                 <p class="font-semibold text-foreground">{{ radio.choice_label }}</p>
+                                 <p class="text-sm text-muted-foreground">
+                                    {% if 'EXPRESS' in radio.choice_label %}
+                                       Delivery within 24 hours
+                                    {% else %}
+                                       Delivery within 3-5 business days
+                                    {% endif %}
+                                 </p>
+                              </div>
+                           </div>
+                        </label>
+                     {% endfor %}
+                  </div>
+                  {{ form.shipping_method.errors }}
+               </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="bg-white rounded-lg shadow-card p-6 space-y-6">
+               <h1 class="font-bold text-lg text-foreground">Order Summary</h1>
+
+               <div class="space-y-2">
+                  <div class="flex justify-between">
+                     <p>Subtotal</p>
+                     <p>৳ {{ total_price }}</p>
+                  </div>
+                  <div class="flex justify-between">
+                     <p>Discount</p>
+                     <p>৳ 0</p>
+                  </div>
+                  <div class="flex justify-between">
+                     <p>Shipping</p>
+                     <p id="shipping-price">৳ {{ shipping_price }}</p>
+                  </div>
+                  <div class="flex justify-between font-semibold text-foreground">
+                     <p>GrandTotal</p>
+                     <p id="grand-total">৳ {{ grand_total }}</p>
+                  </div>
+               </div>
+
+               <button type="submit"
+                       class="w-full btn btn-primary text-white px-4 py-2 rounded-lg">Place Order</button>
+            </aside>
+         </form>
+      </section>
+   </div>
+{% endblock content %}
+
+{% block scripts %}
+   <script>
+   function fillAddressForm(address_type, address, area_id, zone_id, contact) {
+      address_type = address_type.toLowerCase();
+
+      document.getElementById(`id_${address_type}_contact`).value = contact;
+      document.getElementById(`id_${address_type}_address`).value = address;
+      document.getElementById(`id_${address_type}_zone`).value = zone_id;
+      document.getElementById(`id_${address_type}_area`).value = area_id;
+
+      
+      // Check if area already has a selected value
+      const areaSelect = document.getElementById(`id_${address_type}_area`);
+      if (areaSelect.value)  return;
+      
+      // Trigger zone change to load areas with address_type
+      const zoneSelect = document.getElementById(`id_${address_type}_zone`);
+      const event = new CustomEvent('change', {detail: {address_type: address_type}});
+      zoneSelect.dispatchEvent(event);
+      
+      // Load areas then set selected area
+      setTimeout(() => {
+         document.getElementById(`id_${address_type}_area`).value = area_id;
+      }, 50);
+   }
+
+   function getAreas(event) {
+      console.log("executed");
+      // Default to shipping if no address_type in event detail
+      let address_type = "shipping";
+      if (event.type === "change" && event.detail && event.detail.address_type) {
+         address_type = event.detail.address_type;
+      }
+   
+      const zoneId = event.target.value;
+      const areaSelect = document.getElementById(`id_${address_type}_area`);
+   
+      // Check if area already has a selected value
+      if (areaSelect.value && !event.detail) return;
+   
+      areaSelect.innerHTML = "<option value=''>Select area</option>";
+   
+      if (zoneId) {
+         fetch(`/areas?zone=${zoneId}`)
+            .then((response) => response.json())
+            .then((data) => {
+               if (data.areas) {
+                  data.areas.forEach((area) => {
+                     areaSelect.appendChild(new Option(area.name, area.id));
+                  });
+               }
+            })
+            .catch((error) => {
+               console.error("Error fetching areas:", error);
+               areaSelect.innerHTML = "<option value=''>Error loading areas</option>";
+            });
+      }
+   }
+
+   function updateShippingPrice(event) {
+      const shipping_price = document.getElementById("shipping-price");
+      const grand_total = document.getElementById("grand-total");
+      
+      const package = event.target.value;
+      const price = package === "EXPRESS" ? 150 : 60;
+      
+      shipping_price.innerText = `৳ ${price}`;
+      const total_price = parseFloat(shipping_price.innerText.split(" ")[1]);
+      grand_total.innerText = `৳ ${price + total_price}`;
+   }
+   </script>
+{% endblock scripts %}
