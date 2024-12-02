@@ -29,3 +29,22 @@ def create_post(request):
         return redirect("manage-posts")
 
     return render(request, "post-form.html", {"products": products})
+
+
+def edit_post(request, pk):
+    store = Store.objects.get(merchant=request.user)
+    products = get_products(store)
+    post = Post.objects.get(pk=pk)
+
+    if request.method == "POST":
+        description = request.POST.get("description")
+        selected_product_ids = request.POST.getlist("products")
+
+        post.description = description
+        post.save()
+
+        if selected_product_ids:
+            post.products.set(selected_product_ids)
+        return redirect("manage-posts")
+
+    return render(request, "post-form.html", {"post": post, "products": products, "edit": True})
