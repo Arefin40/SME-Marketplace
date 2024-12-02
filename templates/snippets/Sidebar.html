@@ -8,16 +8,16 @@
       {% include "snippets/SidebarItem.html" with path="home" icon="icons/Home.html" label="Home" %}
       {% include "snippets/SidebarItem.html" with path="profile" icon="icons/User.html" label="Profile" %}
       <li>
-         <a href="{% url 'home' %}"
+         <a href="{% url 'cart' %}"
             class="p-3 inline-flex items-center rounded-full hover:bg-white/50 text-foreground group">
             {% include "icons/ShoppingCart.html" %}
             <p class="ml-5 mr-4 inline-flex items-center gap-x-2">
                <span>Cart</span>
-               <span class="px-2 py-1 inline-flex items-center justify-center min-w-8 rounded-full bg-white/75 text-muted-foreground leading-none text-sm">0</span>
+               <span class="px-2 py-1 inline-flex items-center justify-center min-w-8 rounded-full bg-white/75 text-muted-foreground leading-none text-sm">{{ request.user.cart_items.count }}</span>
             </p>
          </a>
       </li>
-      {% include "snippets/SidebarItem.html" with path="home" icon="icons/Shop.html" label="Following" %}
+      {% include "snippets/SidebarItem.html" with path="all_products" icon="icons/Shop.html" label="Marketplace" %}
       {% include "snippets/SidebarItem.html" with path="wishlist" icon="icons/Wishlist.html" label="Wishlist" %}
    </ul>
 

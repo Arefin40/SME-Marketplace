@@ -1,0 +1,110 @@
+{% extends "layouts/root_layout.html" %}
+{% load static %}
+
+{% block slot %}
+   <section class="px-10 py-6 relative col-start-2 col-span-1 bg-white flex flex-col rounded-lg shadow-card h-full overflow-hidden space-y-6">
+      <header class="pb-2 flex items-center justify-between">
+         <h1 class="font-bold text-lg text-foreground">Shopping Cart</h1>
+         <div class="flex items-center gap-4">
+            <p>
+               <span class="font-semibold text-foreground">{{ cart_items|length }}</span>
+               <span>items</span>
+            </p>
+            <div class="h-8 w-[1px] bg-gray-200"></div>
+            <a href="{% url 'clear-cart' %}"
+               class="hover:text-primary transition-colors">Clear All</a>
+         </div>
+      </header>
+
+      {% if cart_items %}
+         <section class="text-sm">
+            <header class="pb-3 grid grid-cols-[2fr,1fr,1fr,1fr,5rem] border-b border-gray-100 uppercase">
+               <div>Product</div>
+               <div class="text-center">Quantity</div>
+               <div class="text-center">Price</div>
+               <div class="text-center">Total</div>
+               <div class="text-center">Action</div>
+            </header>
+
+            <main>
+               {% for item in cart_items %}
+                  <div class="py-3 grid grid-cols-[2fr,1fr,1fr,1fr,5rem] pb-6 border-b border-gray-100">
+                     <div class="flex items-center gap-x-6">
+                        <a href="{% url 'product_details' item.product.id %}">
+                           <img width="64"
+                                height="64"
+                                src="{{ item.product.image.url }}"
+                                alt="{{ item.product.name }}"
+                                class="size-16 object-cover rounded-md" />
+                        </a>
+                        <div class="space-y-0.5">
+                           <a href="{% url 'product_details' item.product.id %}"
+                              class="font-semibold text-foreground">{{ item.product.name }}</a>
+                           <div>
+                              <span>By</span>
+                              <a href="{% url 'store' item.product.collection.store.slug %}"
+                                 class="font-semibold text-foreground">{{ item.product.collection.store.name }}</a>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="flex-center">
+                        <div class="flex-center gap-x-2">
+                           <a href="{% url 'decrement-quantity' item.product.id %}"
+                              class="size-9 flex-center rounded-full bg-gray-100 hover:bg-gray-200 transition-all active:scale-90">
+                              {% include "icons/Minus.html" with class="size-4" %}
+                           </a>
+                           <input type="number"
+                                  readonly
+                                  value="{{ item.quantity }}"
+                                  class="input w-16 text-center rounded-lg number-input" />
+                           <a href="{% url 'add-to-cart' item.product.id %}"
+                              class="size-9 flex-center rounded-full bg-gray-100 hover:bg-gray-200 transition-all active:scale-90">
+                              {% include "icons/Plus.html" with class="size-4" %}
+                           </a>
+                        </div>
+                     </div>
+                     <div class="flex-center text-foreground">{{ item.product.price }} Tk.</div>
+                     <div class="flex-center text-foreground">{{ item.get_total_price }} Tk.</div>
+                     <div class="flex-center">
+                        <a href="{% url 'remove-from-cart' item.product.id %}"
+                           class="size-10 rounded-full flex-center bg-gray-100 hover:bg-gray-200 transition-all active:scale-90">
+                           {% include "icons/Trash.html" with class="size-4" %}
+                        </a>
+                     </div>
+                  </div>
+               {% endfor %}
+            </main>
+         </section>
+
+         <div class="flex justify-between">
+            <a href="{% url 'all_products' %}" class="btn border">
+               {% include "icons/Arrow.html" with class="rotate-180" %}
+               <span>Continue Shopping</span>
+            </a>
+            <div class="flex items-center gap-x-2">
+               <p>
+                  <span>Total:</span>
+                  <span class="font-semibold text-foreground">{{ total_price }} Tk.</span>
+               </p>
+               <a href="{% url 'checkout' %}" class="btn btn-primary">
+                  {% include "icons/Arrow.html" %}
+                  <span>Checkout</span>
+               </a>
+            </div>
+         </div>
+      {% else %}
+         <div class="flex-center flex-col flex-1">
+            <img width="512"
+                 height="512"
+                 src="{% static 'images/EmptyCart.svg' %}"
+                 alt="Empty Cart"
+                 class="w-full max-w-md mx-auto" />
+
+            <p class="text-foreground text-center text-2xl font-semibold tracking-tight leading-relaxed">
+               Your cart is looking a bit lonely
+               <span class="block text-lg font-normal text-muted-foreground mt-1">Add some items to make it happy!</span>
+            </p>
+         </div>
+      {% endif %}
+   </section>
+{% endblock slot %}

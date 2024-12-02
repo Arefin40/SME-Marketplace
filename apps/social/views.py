@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from apps.users.decorators import role_required
 from apps.stores.models import Store
 from apps.products.models import Product
@@ -93,4 +94,6 @@ def toggle_product_in_wishlist(request, p_id):
     item, created = WishlistItem.objects.get_or_create(user=request.user, product=product)
     if not created:
         item.delete()
+    else:
+        messages.success(request, "Product added to wishlist")
     return redirect(request.META.get("HTTP_REFERER"))

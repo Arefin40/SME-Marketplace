@@ -2,6 +2,7 @@ import markdown
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
 from apps.users.decorators import role_required
 from apps.stores.models import Collection
 from .models import Product, ProductImage
@@ -9,6 +10,7 @@ from .forms import ProductForm
 
 
 # Create your views here.
+@login_required
 def all_products(request):
     products = Product.objects.all()
     wishlist_products = request.user.wishlist_items.values_list("product_id", flat=True)
@@ -23,6 +25,7 @@ def all_products(request):
     )
 
 
+@login_required
 def product_details(request, p_id):
     p = Product.objects.get(pk=p_id)
     p.description = markdown.markdown(

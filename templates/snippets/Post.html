@@ -22,11 +22,14 @@
       {% if post.products.count > 0 %}
          <div class="grid {% if post.products.count == 3 %}grid-cols-[2fr,1fr] grid-rows-[repeat(2,200px)]{% elif post.products.count == 2 %}grid-cols-2{% else %}grid-cols-1{% endif %} gap-0.5 w-full max-h-[25rem]">
             {% for product in post.products.all %}
-               <img width="100%"
-                    height="200"
-                    src="{{ product.image.url }}"
-                    alt="Product Image"
-                    class="w-full h-full max-h-[25rem] object-cover flex-shrink-0 {% if post.products.count == 3 %}first:row-span-2{% endif %}" />
+               <a href="{% url 'product_details' product.id %}"
+                  class="block w-full h-full max-h-[25rem] {% if post.products.count == 3 %}first:row-span-2{% endif %}">
+                  <img width="100%"
+                       height="200"
+                       src="{{ product.image.url }}"
+                       alt="Product Image"
+                       class="w-full h-full object-cover" />
+               </a>
             {% endfor %}
          </div>
       {% endif %}
