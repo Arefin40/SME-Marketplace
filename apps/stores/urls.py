@@ -8,4 +8,5 @@ urlpatterns = [
     path("stores/<slug:slug>/follow", views.toggle_follow_store, name="toggle-follow-store"),
     path("manage-inventory", views.manage_inventory, name="manage-inventory"),
     path("manage-orders", views.manage_orders, name="manage-orders"),
+    path("wishlist", views.wishlist, name="wishlist"),
 ]

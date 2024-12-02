@@ -41,10 +41,13 @@
       </div>
 
       <!-- Main Content -->
-      <div class="relative flex flex-col h-screen w-screen overflow-y-auto">
-         {% block body %}
-         {% endblock body %}
-      </div>
+      {% block content %}
+         <div class="relative flex flex-col h-screen w-screen overflow-y-auto">
+            {% block body %}
+            {% endblock body %}
+         </div>
+      {% endblock content %}
+      <script src="{% static 'js/lenis.min.js' %}" defer></script>
       <script src="{% static 'js/script.js' %}" defer></script>
       {% block scripts %}
       {% endblock scripts %}

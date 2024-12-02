@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.password_validation import password_validators_help_texts
-from .models import MerchantApplication
+from .models import MerchantApplication, Address, Area, Zone
 
 User = get_user_model()
 
@@ -185,3 +185,50 @@ class BecomeMerchantForm(forms.ModelForm):
         email = self.cleaned_data.get("email")
         validate_email(email)
         return email
+
+
+class AddressForm(forms.ModelForm):
+    zone = forms.ModelChoiceField(
+        label="Zone",
+        queryset=Zone.objects.all(),
+        required=True,
+        widget=forms.Select(attrs={"class": "input", "onchange": "getAreasFromZone(event)"}),
+        empty_label="Select zone",
+        error_messages={"required": "Please select a zone"},
+    )
+    area = forms.ModelChoiceField(
+        label="Area",
+        queryset=Area.objects.none(),
+        required=True,
+        widget=forms.Select(attrs={"class": "input"}),
+        empty_label="Select area",
+        error_messages={"required": "Please select an area"},
+    )
+
+    class Meta:
+        model = Address
+        fields = ["label", "address", "area", "zone", "contact"]
+        widgets = {
+            "label": forms.TextInput(attrs={"class": "input", "placeholder": "Home, Office, etc."}),
+            "address": forms.TextInput(attrs={"class": "input", "placeholder": "Street address"}),
+            "contact": forms.TextInput(attrs={"class": "input", "placeholder": "Contact number"}),
+        }
+        error_messages = {
+            "label": {"required": "Label is required."},
+            "address": {"required": "Address is required."},
+            "contact": {"required": "Contact number is required."},
+        }
+
+    def __init__(self, *args, **kwargs):
+        # Extract the zone data from the form data if available
+        kwargs.pop("zone", None)
+        super().__init__(*args, **kwargs)
+
+        if "zone" in self.data:
+            try:
+                zone_id = int(self.data.get("zone"))
+                self.fields["area"].queryset = Area.objects.filter(district_id=zone_id)
+            except (ValueError, TypeError):
+                self.fields["area"].queryset = Area.objects.none()
+        elif self.instance and self.instance.zone:
+            self.fields["area"].queryset = Area.objects.filter(district=self.instance.zone)

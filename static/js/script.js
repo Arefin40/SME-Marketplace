@@ -65,3 +65,25 @@ function syncText(event, previewId, defaultText = "") {
    const preview = document.getElementById(previewId);
    preview.textContent = event.target.value || defaultText;
 }
+
+function getAreasFromZone(event) {
+   const areaSelect = document.getElementById("id_area");
+   const zoneId = event.target.value;
+   areaSelect.innerHTML = "<option value=''>Select area</option>";
+
+   if (zoneId) {
+      fetch(`/areas?zone=${zoneId}`)
+         .then((response) => response.json())
+         .then((data) => {
+            if (data.areas) {
+               data.areas.forEach((area) => {
+                  areaSelect.appendChild(new Option(area.name, area.id));
+               });
+            }
+         })
+         .catch((error) => {
+            console.error("Error fetching areas:", error);
+            areaSelect.innerHTML = "<option value=''>Error loading areas</option>";
+         });
+   }
+}

@@ -1,0 +1,129 @@
+{% extends "layouts/root_layout.html" %}
+{% load static %}
+
+{% block slot %}
+   <section class="px-10 py-6 relative col-start-2 col-span-1 bg-white flex flex-col rounded-lg shadow-card h-full overflow-hidden space-y-6">
+      <header class="pb-2 flex items-center justify-between border-b">
+         <h1 class="font-bold text-lg text-foreground">Profile Settings</h1>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+         <!-- Profile Info -->
+         <div class="md:col-span-2 space-y-6">
+            <form method="post" enctype="multipart/form-data" class="space-y-4">
+               {% csrf_token %}
+
+               <div class="flex items-center gap-x-4 mb-6">
+                  <div class="relative">
+                     <img src="{{ user.image.url }}"
+                          alt="Profile picture"
+                          width="96"
+                          height="96"
+                          class="size-24 rounded-full border border-gray-200" />
+                     <label for="image"
+                            class="absolute -bottom-1 -right-1 size-8 rounded-full bg-white shadow-lg border flex items-center justify-center cursor-pointer hover:bg-gray-50">
+                        {% include "icons/Camera.html" with class="size-4" %}
+                     </label>
+                     <input type="file" id="image" name="image" class="hidden" accept="image/*" />
+                  </div>
+               </div>
+
+               <div class="space-y-2">
+                  <label class="text-sm font-medium text-foreground">Full Name</label>
+                  <input type="text" name="name" value="{{ user.name }}" class="input" />
+               </div>
+
+               <div class="space-y-2">
+                  <label class="text-sm font-medium text-foreground">Email</label>
+                  <input type="email"
+                         name="email"
+                         value="{{ user.email }}"
+                         class="input"
+                         readonly />
+               </div>
+
+               <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+
+            <!-- Addresses -->
+            <div class="pt-6 border-t">
+               <h2 class="font-semibold text-foreground mb-4">Saved Addresses</h2>
+
+               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {% for address in user.addresses.all %}
+                     <div class="border rounded-lg p-4">
+                        <div class="flex justify-between items-start">
+                           <div>
+                              <p class="font-medium text-foreground">{{ address.label }}</p>
+                              <p class="text-sm text-muted-foreground mt-1">{{ address.address }}</p>
+                              <p class="text-sm text-muted-foreground">{{ address.area }}, {{ address.zone }}</p>
+                              <p class="text-sm text-muted-foreground">{{ address.contact }}</p>
+                           </div>
+                           <a href="{% url 'delete-address' address.id %}"
+                              class="text-destructive hover:text-destructive/80">
+                              {% include "icons/trash.html" with class="size-4" %}
+                           </a>
+                        </div>
+                     </div>
+                  {% endfor %}
+               </div>
+
+               <button class="btn btn-outline mt-4"
+                       onclick="document.getElementById('addressForm').classList.toggle('hidden')">
+                  {% include "icons/plus.html" with class="size-4" %}
+                  <span>Add New Address</span>
+               </button>
+
+               <form id="addressForm"
+                     class="mt-4 space-y-4 border rounded-lg p-4 hidden"
+                     method="post"
+                     action="{% url 'add-address' %}">
+                  {% csrf_token %}
+                  <div class="space-y-2">
+                     <label class="text-sm font-medium text-foreground">{{ form.label.label }}</label>
+                     {{ form.label }}
+                  </div>
+
+                  <div class="space-y-2">
+                     <label class="text-sm font-medium text-foreground">{{ form.address.label }}</label>
+                     {{ form.address }}
+                  </div>
+
+                  <div class="grid grid-cols-2 gap-4">
+                     <div class="space-y-2">
+                        <label class="text-sm font-medium text-foreground">{{ form.zone.label }}</label>
+                        {{ form.zone }}
+                     </div>
+                     <div class="space-y-2">
+                        <label class="text-sm font-medium text-foreground">{{ form.area.label }}</label>
+                        {{ form.area }}
+                     </div>
+                  </div>
+
+                  <div class="space-y-2">
+                     <label class="text-sm font-medium text-foreground">{{ form.contact.label }}</label>
+                     {{ form.contact }}
+                  </div>
+
+                  <button type="submit" class="btn btn-primary w-full">Save Address</button>
+               </form>
+            </div>
+         </div>
+
+         <!-- Account Settings -->
+         <div class="space-y-6">
+            <div class="border rounded-lg p-4">
+               <h3 class="font-medium text-foreground mb-2">Password</h3>
+               <p class="text-sm text-muted-foreground mb-4">Change your account password</p>
+               <button class="btn btn-outline w-full">Change Password</button>
+            </div>
+
+            <div class="border rounded-lg p-4">
+               <h3 class="font-medium text-destructive mb-2">Danger Zone</h3>
+               <p class="text-sm text-muted-foreground mb-4">Delete your account and all data</p>
+               <button class="btn btn-destructive w-full">Delete Account</button>
+            </div>
+         </div>
+      </div>
+   </section>
+{% endblock slot %}

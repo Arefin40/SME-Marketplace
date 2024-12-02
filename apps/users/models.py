@@ -116,6 +116,14 @@ class Address(models.Model):
     zone = models.CharField(max_length=100)
     contact = models.CharField(max_length=20)
 
+    # Foreign key fields for migration
+    area_fk = models.ForeignKey(
+        Area, null=True, blank=True, on_delete=models.SET_NULL, related_name="addresses"
+    )
+    zone_fk = models.ForeignKey(
+        Zone, null=True, blank=True, on_delete=models.SET_NULL, related_name="addresses"
+    )
+
     class Meta:
         db_table = "addresses"
         verbose_name = "Address"

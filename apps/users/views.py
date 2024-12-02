@@ -5,8 +5,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as signIn, logout as signOut
 from django.db.models import Q
 from .decorators import redirect_authenticated_user, role_required
-from .models import User, Zone, MerchantApplication
-from .forms import UserRegistrationForm, UserSignInForm, BecomeMerchantForm
+from .models import User, Zone, MerchantApplication, Address
+from .forms import UserRegistrationForm, UserSignInForm, BecomeMerchantForm, AddressForm
 
 
 @redirect_authenticated_user
@@ -66,6 +66,41 @@ def logout(request):
     """
     signOut(request)
     return redirect(request.META.get("HTTP_REFERER", "/"))
+
+
+@login_required
+def profile(request):
+    """View function for user profile"""
+    if request.method == "POST":
+        request.user.image = request.FILES.get("image", request.user.image)
+        request.user.name = request.POST.get("name", request.user.name)
+        request.user.save()
+        messages.success(request, "Profile updated successfully!")
+        return redirect("profile")
+
+    form = AddressForm()
+    return render(request, "profile.html", {"form": form})
+
+
+@login_required
+def add_address(request):
+    """Add a new address to the user's address book."""
+    print(request.POST)
+    form = AddressForm(request.POST)
+    if form.is_valid():
+        address = form.save(commit=False)
+        address.user = request.user
+        address.save()
+    else:
+        print(form.errors)
+    return redirect("profile")
+
+
+@login_required
+def delete_address(request, id):
+    address = Address.objects.get(pk=id)
+    address.delete()
+    return redirect("profile")
 
 
 @login_required

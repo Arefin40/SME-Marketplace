@@ -80,6 +80,7 @@ INSTALLED_APPS = [
     "apps.users",
     "apps.stores",
     "apps.products",
+    "apps.social",
     # Allauth apps
     "allauth",
     "allauth.account",

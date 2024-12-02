@@ -72,4 +72,12 @@
    .flex-center {
       @apply flex items-center justify-center;
    }
+
+   .scroll-hide {
+      @apply [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'];
+   }
+
+   .number-input {
+      @apply w-16 text-center rounded-lg [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none;
+   }
 }
