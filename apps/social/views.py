@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from apps.users.decorators import role_required
 from apps.stores.models import Store
-from .models import Post
+from .models import Post, WishlistItem
 
 
 # Create your views here.
@@ -61,3 +62,9 @@ def manage_posts(request):
     store = Store.objects.get(merchant=request.user)
     posts = Post.objects.filter(store=store)
     return render(request, "manage-posts.html", {"posts": posts})
+
+
+@login_required
+def wishlist(request):
+    wishlist_items = WishlistItem.objects.filter(user=request.user)
+    return render(request, "wishlist.html", {"wishlist_items": wishlist_items})
