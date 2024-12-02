@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from apps.users.decorators import role_required
 from apps.stores.models import Store
+from apps.products.models import Product
 from .models import Post, WishlistItem
 
 
@@ -68,3 +69,12 @@ def manage_posts(request):
 def wishlist(request):
     wishlist_items = WishlistItem.objects.filter(user=request.user)
     return render(request, "wishlist.html", {"wishlist_items": wishlist_items})
+
+
+@login_required
+def toggle_product_in_wishlist(request, p_id):
+    product = Product.objects.get(pk=p_id)
+    item, created = WishlistItem.objects.get_or_create(user=request.user, product=product)
+    if not created:
+        item.delete()
+    return redirect(request.META.get("HTTP_REFERER"))

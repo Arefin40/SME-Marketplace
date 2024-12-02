@@ -1,18 +1,38 @@
-<a class="border border-gray-100 p-4 rounded-md shadow-sm" href="{% url 'product_details' product.id %}">
-   <div class="rounded-lg">
-      <img   
-         class=" rounded-lg object-cover" 
-         src="{{ product.image.url }}" 
-         alt="{{ product.name }}">
+<div class="rounded-lg space-y-3">
+   <div class="relative rounded-lg group overflow-hidden">
+      <img class="rounded-lg object-cover"
+           height="512"
+           width="512"
+           src="{{ product.image.url }}"
+           alt="{{ product.name }}" />
+
+      <a href="{% url 'toggle-wishlist' product.id %}"
+         class="size-6 block absolute top-3 right-3 z-10 hover:scale-110 transition-transform">
+         {% if product.id in wishlist_products %}
+            {% include "icons/love_sign.html" with active=True %}
+         {% else %}
+            {% include "icons/love_sign.html" %}
+         {% endif %}
+      </a>
+
+      <div class="p-3 py-2 bg-white/75 backdrop-blur-sm rounded-full absolute left-1/2 -translate-x-1/2 flex items-center gap-x-1 text-sm text-foreground top-full group-hover:-translate-y-12 transition-all duration-300">
+         <img width="20"
+              height="20"
+              src="{{ product.collection.store.logo.url }}"
+              alt="{{ product.collection.store.name }}"
+              class="size-5 rounded-full" />
+         <p>{{ product.collection.store.name }}</p>
+      </div>
    </div>
-   <p class="text-black mt-2">{{ product.name }}</p>
-   <div class="flex text-sm justify-between text-black mt-2 font-semibold">
-       <p class="font-bold text-blue-700">Price: <span class="text-blue-700"></span> {{ product.price }}</p>
-       <p class="flex font-bold gap-1 justify-center items-center">4.7
-         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="yellow">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.54 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/>
-          </svg>
-       </p>
+
+   <div class="flex flex-col gap-y-1 text-sm justify-between font-semibold">
+
+      <p>{{ product.name }}</p>
+      <div class="flex items-center justify-between">
+         <p>
+            ৳<span class="font-semibold text-foreground">{{ product.price }}</span>
+         </p>
+      </div>
    </div>
-   <p class="text-sm">{{ product.store.name }}</p>
-</a>
+
+</div>
