@@ -1,0 +1,198 @@
+{% extends "layouts/dashboard_layout.html" %}
+{% load static %}
+
+{% block main %}
+   <form method="post"
+         class="p-4 space-y-5 col-start-2 col-span-1 bg-white/30 backdrop-blur-xl flex flex-col flex-1 rounded-lg shadow-card">
+      {% csrf_token %}
+      <header class="flex items-center justify-between">
+         <div class="space-y-3">
+            <h2 class="text-foreground text-xl font-bold leading-tight">
+               {% if edit %}
+                  Edit Post
+               {% else %}
+                  Create New Post
+               {% endif %}
+            </h2>
+            <p>Share your products with your customers</p>
+         </div>
+
+         <button type="submit"
+                 class="btn btn-primary rounded-lg hover:shadow-lg hover:shadow-primary/30 hover:button-primary">
+            <span>
+               {% if edit %}
+                  Update Post
+               {% else %}
+                  Create Post
+               {% endif %}
+            </span>
+            {% include "icons/PaperPlane.html" %}
+         </button>
+      </header>
+
+      <main class="flex-1 grid gap-3 grid-cols-[1fr,24rem]">
+         <section class="h-full space-y-3">
+            <!-- Description -->
+            <div class="rounded-lg bg-white border border-gray-100 shadow-card">
+               <label class="block px-4 py-3 border-b text-base border-gray-100 text-foreground font-semibold">Description</label>
+
+               <div class="p-4">
+                  <textarea name="description"
+                            class="w-full min-h-[200px] border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-md resize-none text-foreground"
+                            placeholder="What's on your mind? Share details about your products..."
+                            required>{% if post %}{{ post.description }}{% endif %}</textarea>
+               </div>
+            </div>
+
+            <!-- Images -->
+            <div class="rounded-lg bg-white border border-gray-100 shadow-card">
+               <header class="px-4 py-3 border-b border-gray-100 text-foreground font-semibold">
+                  Post Images
+               </header>
+
+               <main class="p-4 space-y-4">
+                  <div class="relative min-h-[300px] flex-center rounded-lg overflow-hidden">
+                     <div class="absolute inset-0 flex-center pointer-events-none bg-gray-100 rounded-lg">
+                        <div class="space-y-2 text-center">
+                           <img src="{% static 'images/uploadImage.svg' %}"
+                                height="48"
+                                width="48"
+                                class="mx-auto h-12 w-12 text-gray-400 pointer-events-none"
+                                alt="Upload icon" />
+
+                           <p class="pointer-events-none text-base text-center w-full">Upload post images</p>
+                           <p class="text-sm text-gray-500">PNG, JPG, GIF up to 10MB each</p>
+                        </div>
+                     </div>
+
+                     <input type="file"
+                            name="post_images"
+                            accept="image/*"
+                            multiple
+                            class="absolute inset-0 opacity-0 cursor-pointer"
+                            onchange="previewPostImages(this)" />
+                  </div>
+
+                  <div id="postImagePreview" class="grid-cols-3 gap-4 hidden"></div>
+                  <p class="text-sm text-muted-foreground">Add up to 4 images to make your post more engaging</p>
+               </main>
+            </div>
+         </section>
+
+         <section class="h-full space-y-5">
+            <!-- Product Selection -->
+            <div class="rounded-lg bg-white border border-gray-100 shadow-card">
+               <header class="px-4 py-3 border-b border-gray-100 text-foreground font-semibold">
+                  Featured Products
+               </header>
+
+               <main class="p-4 space-y-4">
+                  {% if products %}
+                     <div class="grid grid-cols-2 gap-3">
+                        {% for product in products %}
+                           <label class="relative group cursor-pointer">
+                              <input type="checkbox"
+                                     name="products"
+                                     value="{{ product.id }}"
+                                     class="peer hidden"
+                                     onchange="handleProductSelection(this)"
+                                     {% if post and product in post.products.all %}checked{% endif %} />
+                              <div class="aspect-square rounded-lg border-2 overflow-hidden peer-checked:border-primary peer-checked:ring-2 peer-checked:ring-primary/20">
+                                 <img src="{{ product.image.url }}"
+                                      alt="{{ product.name }}"
+                                      width="200"
+                                      height="200"
+                                      class="w-full h-full object-cover" />
+                                 <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <p class="text-white text-sm font-medium px-2 text-center">{{ product.name }}</p>
+                                 </div>
+                              </div>
+                           </label>
+                        {% endfor %}
+                     </div>
+                  {% else %}
+                     <div class="text-center py-8 space-y-3">
+                        <div class="mx-auto w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
+                           <svg class="w-8 h-8 text-gray-400"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                           </svg>
+                        </div>
+                        <h3 class="text-lg font-medium">No Products Found</h3>
+                        <p class="text-sm text-gray-500">Add some products to your store first</p>
+                     </div>
+                  {% endif %}
+                  <p class="text-sm text-muted-foreground">Select up to 3 products to feature in this post</p>
+               </main>
+            </div>
+
+            <!-- Post Settings -->
+            <div class="rounded-lg bg-white border border-gray-100 shadow-card">
+               <header class="px-4 py-3 border-b border-gray-100 text-foreground font-semibold">
+                  Post Settings
+               </header>
+
+               <main class="p-4 space-y-4">
+                  <div class="flex items-center justify-between">
+                     <label class="text-sm font-medium">Comments</label>
+                     <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox"
+                               name="allow_comments"
+                               class="sr-only peer"
+                               {% if not post or post.allow_comments %}checked{% endif %} />
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                        </div>
+                     </label>
+                  </div>
+               </main>
+            </div>
+         </section>
+      </main>
+   </form>
+
+   <script>
+      function handleProductSelection(checkbox) {
+         const selectedProducts = document.querySelectorAll('input[name="products"]:checked');
+         if (selectedProducts.length > 3) {
+            checkbox.checked = false;
+            alert('You can only select up to 3 products');
+         }
+      }
+
+      function previewPostImages(input) {
+         const previewContainer = document.getElementById('postImagePreview');
+         previewContainer.innerHTML = '';
+         
+         if (input.files.length > 4) {
+            alert('You can only upload up to 4 images');
+            input.value = '';
+            previewContainer.classList.add('hidden');
+            previewContainer.classList.remove('grid');
+            return;
+         }
+
+         if (input.files.length === 0) {
+            previewContainer.classList.add('hidden');
+            previewContainer.classList.remove('grid');
+            return;
+         }
+
+         previewContainer.classList.remove('hidden');
+         previewContainer.classList.add('grid');
+
+         Array.from(input.files).forEach(file => {
+            const reader = new FileReader();
+            const div = document.createElement('div');
+            div.className = 'aspect-square bg-gray-100 rounded-lg overflow-hidden';
+            
+            reader.onload = e => {
+               div.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover" />`;
+               previewContainer.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+         });
+      }
+   </script>
+{% endblock main %}
