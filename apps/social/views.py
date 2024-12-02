@@ -48,3 +48,9 @@ def edit_post(request, pk):
         return redirect("manage-posts")
 
     return render(request, "post-form.html", {"post": post, "products": products, "edit": True})
+
+
+def delete_post(request, pk):
+    post = Post.objects.get(pk=pk)
+    post.delete()
+    return redirect("manage-posts")
