@@ -1,9 +1,81 @@
-{% extends "layouts/root_layout.html" %}
+{% extends "layouts/base.html" %}
 
 {% load static %}
 
-{% block slot %}
-   <section class="col-start-2 col-span-1 bg-white flex-1 rounded-lg shadow-card">
-      <h1 class="text-3xl text-center">Hello World</h1>
+{% block body %}
+   <section class="p-3 grid grid-cols-[20rem,1fr] h-full overflow-hidden">
+      {% include "snippets/sidebar.html" %}
+
+      <main class="relative col-start-2 col-span-1 h-full rounded-lg shadow-card overflow-hidden">
+         <header class="absolute top-0 inset-x-0 h-16 grid grid-cols-[5fr,3fr] shadow-md shadow-foreground/5 divide-x divide-gray-200 bg-white">
+            <div class="px-6 grid grid-cols-[1fr,1px,1fr] items-center justify-items-center">
+               <a href="{% url 'home' %}"
+                  class="text-lg font-semibold {% if request.resolver_match.url_name == 'home' %}text-primary{% else %}text-foreground hover:text-primary{% endif %} transition-colors duration-200">
+                  Timeline
+               </a>
+               <span class="h-full w-px bg-gradient-to-b from-gray-50 via-gray-200 to-gray-50"></span>
+               <a href="{% url 'all_products' %}"
+                  class="text-lg font-semibold {% if request.resolver_match.url_name == 'all_products' %}text-primary{% else %}text-foreground hover:text-primary{% endif %} transition-colors duration-200">
+                  Products
+               </a>
+            </div>
+
+            <div class="px-6 flex-center">
+               <form action="{% url 'all_products' %}"
+                     class="px-4 py-2 flex-center h-11 w-full rounded-full bg-gray-100">
+                  <img width="24"
+                       height="24"
+                       src="{% static 'images/Search.svg' %}"
+                       alt="Search"
+                       class="size-5" />
+
+                  <input type="text"
+                         name="q"
+                         value="{{ request.GET.q }}"
+                         class="w-full bg-transparent outline-none border-0 ring-0 focus:ring-0 focus:outline-none"
+                         placeholder="Search for products" />
+               </form>
+            </div>
+         </header>
+
+         <main class="pt-16 max-h-full h-full grid grid-cols-[5fr,3fr] divide-x divide-gray-200 bg-white/75 overflow-hidden">
+            <div class="p-6 flex flex-col gap-y-6 overflow-y-auto scroll-hide">
+               {% for post in posts %}
+                  {% include "snippets/Post.html" with post=post %}
+               {% endfor %}
+            </div>
+            <div class="p-6 flex flex-col gap-y-5">
+               {% for store in stores %}
+                  <div class="flex items-center gap-x-5 justify-between">
+                     <div class="flex items-center gap-x-5">
+                        <img width="64"
+                             height="64"
+                             src="{{ store.logo.url }}"
+                             alt="{{ store.name }}"
+                             class="size-16 rounded-full object-cover" />
+                        <div class="flex flex-col gap-y-1">
+                           <p class="flex gap-x-1 items-center divide-x">
+                              <span class="font-bold text-foreground">{{ store.name }}</span>
+                              <span class="pl-1 text-sm">@{{ store.slug }}</span>
+                           </p>
+                           <p>{{ store.total_followers }} followers</p>
+                        </div>
+                     </div>
+
+                     <form method="post" action="{% url 'toggle-follow-store' store.slug %}">
+                        {% csrf_token %}
+                        <button class="font-semibold {% if store.is_following %}bg-gray-200 text-gray-900{% else %}bg-primary text-white{% endif %} px-4 py-2 rounded-full">
+                           {% if store.is_following %}
+                              Following
+                           {% else %}
+                              Follow
+                           {% endif %}
+                        </button>
+                     </form>
+                  </div>
+               {% endfor %}
+            </div>
+         </main>
+      </main>
    </section>
-{% endblock slot %}
+{% endblock body %}

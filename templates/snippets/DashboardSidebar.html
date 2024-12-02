@@ -10,14 +10,26 @@
          {% include "snippets/SidebarItem.html" with path="manage-users" icon="icons/User.html" label="Manage Users" %}
          {% include "snippets/SidebarItem.html" with path="merchant-applications" icon="icons/MerchantRequests.html" label="Merchant Requests" %}
       {% elif user.role == 'MERCHANT' %}
-         {% include "snippets/SidebarItem.html" with path="manage-inventory" icon="icons/DashboardBlocks.html" label="Manage Inventory" %}
-         {% include "snippets/SidebarItem.html" with path="manage-orders" icon="icons/DashboardBlocks.html" label="Manage Orders" %}
+         {% include "snippets/SidebarItem.html" with path="manage-orders" icon="icons/Orders.html" label="Manage Orders" %}
+         {% include "snippets/SidebarItem.html" with path="manage-posts" icon="icons/Post.html" label="Manage Posts" %}
       {% endif %}
    </ul>
 
    <div class="px-7 mt-auto">
       {% if user.is_authenticated %}
          <div class="relative p-3 flex items-center gap-x-3 rounded-xl bg-white shadow-card w-full">
+            {% if user.role == 'MERCHANT' and user.stores.exists %}
+               <img src="{{ user.stores.first.logo.url }}"
+                    width="40"
+                    height="40"
+                    alt="Store Logo"
+                    class="size-11 rounded-full flex-shrink-0 border border-gray-200" />
+
+               <div class="text-left w-full leading-none space-y-1">
+                  <p class="font-semibold">{{ user.stores.first.name }}</p>
+                  <p class="text-sm text-muted-foreground">{{ user.stores.first.total_followers }} Followers</p>
+               </div>
+            {% else %}
             <img src="{{ user.image.url }}"
                  width="40"
                  height="40"
@@ -28,6 +40,7 @@
                <p class="font-semibold">{{ user.name }}</p>
                <p class="text-sm text-muted-foreground">Account Settings</p>
             </div>
+            {% endif %}
 
             <button onclick="ShowDropdownMenu(this)"
                     class="size-9 rounded-full flex-shrink-0 bg-gray-50 flex items-center justify-center active:scale-75 transition-all">

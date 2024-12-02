@@ -1,7 +1,7 @@
-<div class="rounded-lg border border-gray-100 shadow-sm">
+<div class="rounded-lg border border-gray-100 shadow-sm w-full bg-white">
    <!-- Post Header -->
-   <header class="px-6 py-2.5 mb-4 flex gap-x-3 items-center w-full border-b border-gray-200">
-      <img src="media/profiles/user_placeholder.png"
+   <header class="px-6 py-2.5 flex gap-x-3 items-center w-full border-b border-gray-100">
+      <img src="{{ post.store.logo.url }}"
            width="8"
            height="8"
            alt="Profile Picture"
@@ -9,30 +9,59 @@
 
       <div class="grid">
          <p class="flex items-center gap-x-2">
-            <span class="font-semibold text-foreground">Shop name</span>
-            <span class="text-sm text-muted-foreground">@store</span>
+            <span class="font-semibold text-foreground">{{ post.store.name }}</span>
+            <span class="text-sm text-muted-foreground">@{{ post.store.slug }}</span>
          </p>
-         <span class="text-sm text-muted-foreground">2 hours ago</span>
+         <span class="text-sm text-muted-foreground">{{ post.created_at|timesince }} ago</span>
       </div>
    </header>
 
    <!-- Post Content -->
    <main>
-      <div class="flex gap-x-0.5 w-full">
-         <div class="w-full flex-center text-lg bg-gray-200">1</div>
-         <div class="grid gap-y-0.5 grid-rows-2">
-            <div class="h-[12.5rem] flex-center text-lg bg-gray-200 aspect-[1.3/1]">2</div>
-            <div class="h-[12.5rem] flex-center text-lg bg-gray-200 aspect-[1.3/1]">3</div>
+      <div class="px-6 py-3 text-foreground text-sm space-y-2.5">{{ post.description|safe }}</div>
+      {% if post.products.count > 0 %}
+         <div class="grid {% if post.products.count == 3 %}grid-cols-[2fr,1fr] grid-rows-[repeat(2,200px)]{% elif post.products.count == 2 %}grid-cols-2{% else %}grid-cols-1{% endif %} gap-0.5 w-full max-h-[25rem]">
+            {% for product in post.products.all %}
+               <img width="100%"
+                    height="200"
+                    src="{{ product.image.url }}"
+                    alt="Product Image"
+                    class="w-full h-full max-h-[25rem] object-cover flex-shrink-0 {% if post.products.count == 3 %}first:row-span-2{% endif %}" />
+            {% endfor %}
          </div>
-      </div>
+      {% endif %}
    </main>
 
    <!-- Post Footer -->
    <footer class="px-6 py-4 flex items-center text-sm">
       <div class="flex items-center gap-x-2">
-         {% include "icons/LoveReact.html" %}
+         <a href="{% url 'toggle-like-post' post.id %}"
+            class="transition-transform active:scale-125">
+            {% if post.user_has_liked %}
+               {% include "icons/love_sign.html" with active=True %}
+            {% else %}
+               {% include "icons/love_sign.html" with active=False %}
+            {% endif %}
+         </a>
          <p>
-            You and <span class="text-foreground">16K</span> others liked this
+            {% if post.total_likes == 0 %}
+               Be the first to like this
+            {% elif post.user_has_liked %}
+               {% if post.total_likes == 1 %}
+                  You liked this
+               {% else %}
+                  You and {{ post.total_likes|add:"-1" }}
+                  {% if post.total_likes == 2 %}
+                     other
+                  {% else %}
+                     others
+                  {% endif %}
+                  liked this
+               {% endif %}
+            {% else %}
+               {{ post.total_likes }} like
+               {% if post.total_likes > 1 %}s{% endif %}
+            {% endif %}
          </p>
       </div>
    </footer>
