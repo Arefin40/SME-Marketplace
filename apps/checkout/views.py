@@ -19,8 +19,12 @@ def cart(request):
 
 @login_required
 def add_to_cart(request, pk):
-    user = request.user
     product = Product.objects.get(id=pk)
+    user = request.user
+    if product.collection.store.merchant != user:
+        messages.error(request, "You are not allowed to add this product to cart")
+        return redirect(request.META.get("HTTP_REFERER"))
+
     cart_item, created = CartItem.objects.get_or_create(user=user, product=product)
 
     if not created:
