@@ -1,166 +1,108 @@
-{% extends "layouts/root_layout.html" %}
+{% extends "layouts/dashboard_layout.html" %}
 
 {% block slot %}
-<section class="col-start-2 col-span-1 bg-white flex rounded-lg shadow-card">
-   <section class="w-full rounded-lg overflow-hidden">
-      <div class="ml-10 mt-10">
-         <h3 class="font-bold text-black text-xl">Inventory</h3>
-         <p>Manage product stock levels,availability,variants</p>
-      </div>
-      <div class="flex justify-between ml-10 mt-8 mr-5">
-         <h3 class="font-bold text-black text-xl">All Products 15</h3>
-         <div class="gap-2">
-            <input class="bg-[url('/static/images/Search.svg')] bg-no-repeat bg-[length:16px_16px] bg-[left_8px_center] w-[384px] h-[40px] pl-7 rounded-md" placeholder="search" type="search" name="" id="">
-            <button class="btn w-[96px] h-[40px] rounded-md border-2 border-gray-400">Filters</button>
-            <button class="btn bg-blue-500 text-white  w-[138px] h-[40px] rounded-md">+ Add Product</button>
-         </div>
-      </div>
-      <div class="flex ml-10 mt-8">
-         <input class="mr-4 flex items-center" type="checkbox" name="" id="">
-         <p class="mr-44 text-black">Product Details</p>
-         <p class="mr-44 text-black">Unit Price</p>
-         <p class="mr-44 text-black">Stock</p>
-         <p class="mr-44 text-black">Sales</p>
-         <p class="mr-44 text-black">Visibility</p>
-         <p class="mr-5 text-black">
-            <button class="flex items-center justify-center w-10 h-10 rounded-full text-gray-600 text-xl font-bold hover:bg-gray-300 transform rotate-90">
-               ...
-             </button>
-         </p>
-      </div>
-      <div class=" h-[32px] mt-8 ml-10 mr-8 bg-gray-100">
-         <h5 class="pl-3 mt-1 text-black">Collection name(5)</h5>
-      </div>
-      {% comment %}-------------------------------------------- product line------------------------------------------------ {% endcomment %}
-      <div class="flex items-center ml-10 mt-8">
-         <input class="mr-4 flex items-center" type="checkbox" name="" id="">
-         <img class="w-[48px] h-[48px] rounded-md bg-gray-200 mr-3" src="" alt="">
-         <div class="mr-14">
-            <p>Product name</p>
-            <p>PRODUCT-SKU</p>
-         </div>
-         <P class="mr-20 ml-14">12540 BDT</P>
-         <P class="mr-24 ml-24">12</P>
-         <P class="mr-20 ml-24">120</P>
-         <div class="mr-20 ml-28">
-            <label class="relative inline-flex items-center cursor-pointer">
-               <input type="checkbox" class="sr-only peer" />
-               <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer dark:bg-blue-400 peer-checked:bg-blue-400 transition-colors"></div>
-               <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-full"></div>
-             </label>
-         </div>
-         <p class="ml-28">
-            <button class="flex items-center justify-center w-10 h-10 rounded-full text-gray-600 text-xl font-bold hover:bg-gray-300 transform rotate-90">
-               ...
-             </button>
-         </p>
-      </div>
-      <div class="flex items-center ml-10 mt-8">
-         <input class="mr-4 flex items-center" type="checkbox" name="" id="">
-         <img class="w-[48px] h-[48px] rounded-md bg-gray-200 mr-3" src="" alt="">
-         <div class="mr-14">
-            <p>Product name</p>
-            <p>PRODUCT-SKU</p>
-         </div>
-         <P class="mr-20 ml-14">12540 BDT</P>
-         <P class="mr-24 ml-24">12</P>
-         <P class="mr-20 ml-24">120</P>
-         <div class="mr-20 ml-28">
-            <label class="relative inline-flex items-center cursor-pointer">
-               <input type="checkbox" class="sr-only peer" />
-               <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer dark:bg-blue-400 peer-checked:bg-blue-400 transition-colors"></div>
-               <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-full"></div>
-             </label>
-         </div>
-         <p class="ml-28">
-            <button class="flex items-center justify-center w-10 h-10 rounded-full text-gray-600 text-xl font-bold hover:bg-gray-300 transform rotate-90">
-               ...
-             </button>
-         </p>
-      </div>
-      <div class="flex items-center ml-10 mt-8">
-         <input class="mr-4 flex items-center" type="checkbox" name="" id="">
-         <img class="w-[48px] h-[48px] rounded-md bg-gray-200 mr-3" src="" alt="">
-         <div class="mr-14">
-            <p>Product name</p>
-            <p>PRODUCT-SKU</p>
-         </div>
-         <P class="mr-20 ml-14">12540 BDT</P>
-         <P class="mr-24 ml-24">12</P>
-         <P class="mr-20 ml-24">120</P>
-         <div class="mr-20 ml-28">
-            <label class="relative inline-flex items-center cursor-pointer">
-               <input type="checkbox" class="sr-only peer" />
-               <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer dark:bg-blue-400 peer-checked:bg-blue-400 transition-colors"></div>
-               <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-full"></div>
-             </label>
-         </div>
-         <p class="ml-28">
-            <button class="flex items-center justify-center w-10 h-10 rounded-full text-gray-600 text-xl font-bold hover:bg-gray-300 transform rotate-90">
-               ...
-             </button>
-         </p>
-      </div>
-      <div class="flex items-center ml-10 mt-8">
-         <input class="mr-4 flex items-center" type="checkbox" name="" id="">
-         <img class="w-[48px] h-[48px] rounded-md bg-gray-200 mr-3" src="" alt="">
-         <div class="mr-14">
-            <p>Product name</p>
-            <p>PRODUCT-SKU</p>
-         </div>
-         <P class="mr-20 ml-14">12540 BDT</P>
-         <P class="mr-24 ml-24">12</P>
-         <P class="mr-20 ml-24">120</P>
-         <div class="mr-20 ml-28">
-            <label class="relative inline-flex items-center cursor-pointer">
-               <input type="checkbox" class="sr-only peer" />
-               <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer dark:bg-blue-400 peer-checked:bg-blue-400 transition-colors"></div>
-               <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-full"></div>
-             </label>
-         </div>
-         <p class="ml-28">
-            <button class="flex items-center justify-center w-10 h-10 rounded-full text-gray-600 text-xl font-bold hover:bg-gray-300 transform rotate-90">
-               ...
-             </button>
-         </p>
-      </div>
-      <div class="flex items-center ml-10 mt-8">
-         <input class="mr-4 flex items-center" type="checkbox" name="" id="">
-         <img class="w-[48px] h-[48px] rounded-md bg-gray-200 mr-3" src="" alt="">
-         <div class="mr-14">
-            <p>Product name</p>
-            <p>PRODUCT-SKU</p>
-         </div>
-         <P class="mr-20 ml-14">12540 BDT</P>
-         <P class="mr-24 ml-24">12</P>
-         <P class="mr-20 ml-24">120</P>
-         <div class="mr-20 ml-28">
-            <label class="relative inline-flex items-center cursor-pointer">
-               <input type="checkbox" class="sr-only peer" />
-               <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer dark:bg-blue-400 peer-checked:bg-blue-400 transition-colors"></div>
-               <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-full"></div>
-             </label>
-         </div>
-         
-         <p class="ml-28">
-            <button class="flex items-center justify-center w-10 h-10 rounded-full text-gray-600 text-xl font-bold hover:bg-gray-300 transform rotate-90">
-               ...
-             </button>
-         </p>
-      </div>
+   <header class="space-y-3">
+      <h2 class="text-foreground text-xl font-bold leading-tight">Inventory</h2>
+      <p>Manage product stock levels, availability, variants</p>
+   </header>
 
-      {% comment %} fixed insert-0 --------------------------- page change button--------------------------------------- {% endcomment %}
-
-      <div class=" flex items-end justify-center gap-2 mb-7 mt-5">
-         <button class="w-[26px] h-[26px] rounded-md bg-gray-200">1</button>
-         <button class="w-[26px] h-[26px] rounded-md bg-gray-200">2</button>
-         <button class="w-[26px] h-[26px] rounded-md bg-gray-200">3</button>
-         <button class="w-[26px] h-[26px] rounded-md bg-gray-200">4</button>
-         <button class="w-[26px] h-[26px] rounded-md bg-gray-200">5</button>
-         <button class="w-[26px] h-[26px] rounded-md bg-gray-200">6</button>
+   <header class="mt-10 flex items-center justify-between gap-x-4 text-sm">
+      <h3 class="font-bold text-foreground text-xl">
+         <span>All Products</span> <span class="text-muted-foreground">{{ products|length }}</span>
+      </h3>
+      <div class="max-w-lg w-full flex-center gap-x-2">
+         <form method="get" action="{% url 'manage-inventory' %}" class="w-full">
+            <input type="text"
+                   name="q"
+                   value="{{ request.GET.q }}"
+                   autocomplete="off"
+                   placeholder="Search products"
+                   class="w-full h-10 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-md" />
+         </form>
+         <a href="{% url 'add_product' %}"
+            class="btn btn-primary flex-center gap-x-1 font-semibold">
+            {% include "icons/Plus.html" %}
+            Add Product
+         </a>
       </div>
-      
-   </section>
-   
-</section>
+   </header>
+
+   <main class="mt-10 space-y-10">
+      <table class="w-full text-gray-800">
+         <thead>
+            <tr class="bg-gray-100 rounded-sm text-foreground">
+               <th class="px-3 py-3 w-4 font-semibold">
+                  <input type="checkbox" class="size-4" />
+               </th>
+               <th class="py-3 font-semibold text-left">Product Details</th>
+               <th class="py-3 font-semibold">Collection</th>
+               <th class="py-3 font-semibold">Unit Price</th>
+               <th class="py-3 font-semibold">Stock / Sales</th>
+               <th class="py-3 font-semibold">Visibility</th>
+               <th class="py-3 w-24 font-semibold">
+                  <span class="sr-only">Actions</span>
+               </th>
+            </tr>
+         </thead>
+         <tbody>
+            {% for product in products %}
+               <tr class="text-sm">
+                  <td class="px-3 py-3">
+                     <input type="checkbox" class="size-4" />
+                  </td>
+                  <td class="py-3">
+                     <div class="flex items-center gap-x-3">
+                        <img src="media/{{ product.image }}"
+                             height="48"
+                             width="48"
+                             alt="{{ product.name }}"
+                             class="size-12 rounded-md flex-shrink-0 bg-gray-100" />
+                        <div class="space-y-0.5">
+                           <h4 class="font-semibold text-base">{{ product.name }}</h4>
+                           <p class="text-sm text-muted-foreground">{{ product.sku }}</p>
+                        </div>
+                     </div>
+                  </td>
+                  <td class="text-center">{{ product.collection.name }}</td>
+                  <td class="text-center">
+                     <span class="font-semibold text-foreground">{{ product.price }}</span>
+                     <span class="text-muted-foreground">BDT</span>
+                  </td>
+                  <td class="text-center font-semibold">
+                     <span class="text-foreground">{{ product.stock }}</span> / <span class="text-emerald-500">{{ product.sales|default:0 }}</span>
+                  </td>
+                  <td class="text-center">
+                     <div class="relative inline-block w-11 h-6">
+                        <input type="checkbox"
+                               id="toggle-{{ product.id }}"
+                               name="toggle-{{ product.id }}"
+                               {% if product.is_visible %}checked{% endif %}
+                               class="absolute opacity-0 w-0 h-0 peer" />
+                        <label for="toggle-{{ product.id }}"
+                               class="block w-full h-full bg-gray-300 rounded-full cursor-pointer transition-colors peer-checked:bg-blue-500">
+                        </label>
+                        <div class="absolute top-1/2 left-0.5 size-5 bg-white rounded-full transition-transform transform peer-checked:translate-x-full -translate-y-1/2 pointer-events-none">
+                        </div>
+                     </div>
+                  </td>
+                  <td class="pr-3 text-right">
+                     <div class="relative">
+                        <button onclick="ShowDropdownMenu(this)"
+                                class="size-9 inline-flex items-center justify-center active:scale-75 transition-transform bg-gray-50 hover:bg-gray-100 rounded-full">
+                           {% include "icons/Menu.html" %}
+                        </button>
+
+                        <ul class="dropdown-menu hidden min-w-32 p-2 absolute right-0 top-[calc(100%+0.5rem)] bg-white rounded-lg shadow-card origin-top-right animate-scale-in z-10 text-sm">
+                           <li>
+                              <a href="{% url 'update_product' product.id %}"
+                                 class="px-3 py-1 w-full inline-block text-left hover:bg-accent rounded-md">Update</a>
+                           </li>
+                        </ul>
+                     </div>
+                  </td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+   </main>
 {% endblock slot %}

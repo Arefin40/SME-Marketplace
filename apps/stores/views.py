@@ -19,8 +19,24 @@ def store(request, slug):
         return redirect(request.META.get("HTTP_REFERER", "home"))
 
 
+@role_required(["MERCHANT"])
 def manage_inventory(request):
-    return render(request, "manage_inventory.html")
+    store = Store.objects.filter(merchant=request.user).first()
+    collections = store.collections.all().prefetch_related("products") if store else []
+    products = []
+    for collection in collections:
+        products.extend(collection.products.all())
+
+    # Handle search query
+    query = request.GET.get("q")
+    if query:
+        filtered_products = []
+        for product in products:
+            if query.lower() in product.name.lower() or query.lower() in product.sku.lower():
+                filtered_products.append(product)
+        products = filtered_products
+
+    return render(request, "manage_inventory.html", {"products": products})
 
 
 def manage_orders(request):
