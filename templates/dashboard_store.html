@@ -1,0 +1,59 @@
+{% extends "layouts/dashboard_layout.html" %}
+
+{% block slot %}
+   <header class="space-y-3">
+      <h2 class="text-foreground text-xl font-bold leading-tight">Store Dashboard</h2>
+      <p>View store analytics and manage your business</p>
+   </header>
+
+   <main class="mt-10 grid grid-cols-3 gap-5">
+      <div class="p-4 border rounded-lg">
+         <div class="flex items-center justify-between">
+            <h3 class="font-semibold text-foreground">Total Orders</h3>
+            <span class="text-2xl font-bold text-foreground">{{ total_orders }}</span>
+         </div>
+         <p class="mt-2 text-sm text-muted-foreground">Orders received today</p>
+      </div>
+
+      <div class="p-4 border rounded-lg">
+         <div class="flex items-center justify-between">
+            <h3 class="font-semibold text-foreground">Revenue</h3>
+            <span class="text-2xl font-bold text-foreground">{{ total_revenue }} Tk.</span>
+         </div>
+         <p class="mt-2 text-sm text-muted-foreground">Revenue generated today</p>
+      </div>
+
+      <div class="p-4 border rounded-lg">
+         <div class="flex items-center justify-between">
+            <h3 class="font-semibold text-foreground">Products</h3>
+            <span class="text-2xl font-bold text-foreground">{{ total_products }}</span>
+         </div>
+         <p class="mt-2 text-sm text-muted-foreground">Total active products</p>
+      </div>
+   </main>
+
+   <section class="mt-10">
+      <div class="flex items-center justify-between">
+         <h3 class="font-semibold text-foreground">Recent Orders</h3>
+         <a href="{% url 'manage-orders' %}"
+            class="text-sm text-primary hover:underline">View all</a>
+      </div>
+
+      <div class="mt-5 border rounded-lg divide-y">
+         {% for order in orders %}
+            <div class="p-4 flex items-center justify-between">
+               <div class="space-y-1">
+                  <p class="font-medium text-foreground">#{{ order.id }}</p>
+                  <p class="text-sm text-muted-foreground">{{ order.shipping_name }}</p>
+               </div>
+               <div class="text-right">
+                  <p class="font-medium text-foreground">{{ order.total_price }} Tk.</p>
+                  <p class="text-sm text-muted-foreground">{{ order.order_date|date:"M d, Y" }}</p>
+               </div>
+            </div>
+         {% empty %}
+            <div class="p-4 text-sm text-center text-muted-foreground">No orders found</div>
+         {% endfor %}
+      </div>
+   </section>
+{% endblock slot %}

@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from apps.users.decorators import role_required
 from .forms import CreateStoreForm
 from .models import Store, StoreFollow
 
 
 # Create your views here.
+@login_required
 def store(request, slug):
     try:
         store = Store.objects.get(slug=slug)
