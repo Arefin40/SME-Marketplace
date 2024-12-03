@@ -21,7 +21,7 @@ def cart(request):
 def add_to_cart(request, pk):
     product = Product.objects.get(id=pk)
     user = request.user
-    if product.collection.store.merchant != user:
+    if product.collection.store.merchant == user:
         messages.error(request, "You are not allowed to add this product to cart")
         return redirect(request.META.get("HTTP_REFERER"))
 

@@ -91,6 +91,10 @@ def wishlist(request):
 @login_required
 def toggle_product_in_wishlist(request, p_id):
     product = Product.objects.get(pk=p_id)
+    if product.collection.store.merchant == request.user:
+        messages.error(request, "You are not allowed to add your own product to wishlist")
+        return redirect(request.META.get("HTTP_REFERER"))
+
     item, created = WishlistItem.objects.get_or_create(user=request.user, product=product)
     if not created:
         item.delete()
