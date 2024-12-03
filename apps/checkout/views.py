@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from apps.products.models import Product
+from .models import CartItem, Order, OrderItem
 from .forms import CheckoutForm
 
 
@@ -73,6 +74,44 @@ def checkout(request):
     )
 
 
+@login_required
+def place_order(request):
+    if request.method == "POST":
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            cart_items, total_price = get_cart_items_and_total_price(request.user)
+            cleaned_data = form.cleaned_data.copy()
+
+            # Convert Zone to string value for CharField
+            cleaned_data["shipping_zone"] = str(cleaned_data["shipping_zone"])
+            cleaned_data["billing_zone"] = str(cleaned_data["billing_zone"])
+            # Convert Area to string value for CharField
+            cleaned_data["shipping_area"] = str(cleaned_data["shipping_area"].name)
+            cleaned_data["billing_area"] = str(cleaned_data["billing_area"].name)
+
+            order = Order.objects.create(user=request.user, **cleaned_data, total_price=total_price)
+
+            # Transfer cart items to order items
+            for i in cart_items:
+                OrderItem.objects.create(order=order, product=i.product, quantity=i.quantity)
+
+            # Clear cart items
+            cart_items.delete()
+
+            return redirect(f"thankyou?order_id={order.id}")
+
+    return redirect("checkout")
+
+
+@login_required
+def thankyou(request):
+    order_id = request.GET.get("order_id")
+    if not order_id:
+        return redirect("home")
+
+    order = Order.objects.get(id=order_id)
+    order_items = OrderItem.objects.filter(order=order)
+    return render(request, "thankyou.html", {"order": order, "order_items": order_items})
 
 
 def get_cart_items_and_total_price(user):

@@ -23,7 +23,7 @@ class CartItem(models.Model):
 
 
 class Order(models.Model):
-    id = models.CharField(max_length=6, unique=True, editable=False, primary_key=True)
+    id = models.CharField(max_length=5, unique=True, editable=False, primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
     order_date = models.DateTimeField(auto_now_add=True)
     shipping_date = models.DateTimeField(null=True, blank=True)
@@ -59,7 +59,7 @@ class Order(models.Model):
     shipping_method = models.CharField(max_length=10, choices=SHIPPING_CHOICES, default="STANDARD")
 
     def __str__(self):
-        return f"Order #{self.id} - {self.user.name}"
+        return f"Order {self.id} - {self.user.name}"
 
     class Meta:
         db_table = "orders"
@@ -72,12 +72,34 @@ class Order(models.Model):
         if not self.id:
             last_order = Order.objects.order_by("-id").first()
             if last_order:
-                last_number = int(last_order.id[2:])  # Skip 'S' and '#'
-                self.id = f"#S{str(last_number + 1).zfill(5)}"
+                self.id = str(int(last_order) + 1).zfill(5)
             else:
-                self.id = "#S12345"
+                self.id = "12345"
 
         super().save(*args, **kwargs)
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    quantity = models.PositiveIntegerField(default=1)
+    product_name = models.CharField(max_length=255)
+    product_price = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def save(self, *args, **kwargs):
+        self.product_name = self.product.name
+        self.product_price = self.product.price
+        self.total_price = self.product.price * self.quantity
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product.name}"
+
+    class Meta:
+        db_table = "order_items"
+        verbose_name = "Order Item"
+        verbose_name_plural = "Order Items"
 
 
 class Payment(models.Model):

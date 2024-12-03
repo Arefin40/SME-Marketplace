@@ -1,0 +1,104 @@
+{% extends "layouts/root_layout.html" %}
+{% load static %}
+
+{% block slot %}
+   <section class="px-10 py-6 relative col-start-2 col-span-1 bg-white flex flex-col rounded-lg shadow-card h-full overflow-hidden space-y-6">
+      <header class="pb-2 flex items-center justify-between">
+         <h1 class="font-bold text-lg text-foreground">Order Confirmation</h1>
+      </header>
+
+      <div class="flex-center flex-col flex-1">
+         <div class="w-24 h-24 rounded-full bg-green-100 flex-center mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="w-12 h-12 text-green-600"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+               <path d="M20 6L9 17l-5-5" />
+            </svg>
+         </div>
+
+         <div class="text-center">
+            <h1 class="text-foreground text-2xl font-bold tracking-tight leading-relaxed">Thank you for your order!</h1>
+            <div class="flex flex-col">
+               <p class="mt-1">
+                  Your order <span class="font-semibold text-foreground">#{{ order.id }}</span> has been placed successfully!
+               </p>
+               <span class="mt-1">We're processing it now and will notify you once it ships.</span>
+            </div>
+         </div>
+
+         <div class="mt-8 w-full max-w-lg mx-auto">
+            <div class="border rounded-lg overflow-hidden">
+               <div class="bg-gray-50 px-4 py-3 border-b">
+                  <h3 class="font-semibold text-foreground">Order Summary</h3>
+               </div>
+
+               <div class="p-4 space-y-4">
+                  {% for item in order_items %}
+                     <div class="flex items-center justify-between text-sm">
+                        <div class="flex items-center gap-x-4">
+                           <img src="{{ item.product.image.url }}"
+                                alt="{{ item.product.name }}"
+                                width="48"
+                                height="48"
+                                class="w-12 h-12 rounded-md object-cover" />
+                           <div>
+                              <h4 class="font-medium text-foreground">{{ item.product.name }}</h4>
+                              <p class="text-muted-foreground">Qty: {{ item.quantity }}</p>
+                           </div>
+                        </div>
+                        <span class="font-medium text-foreground">{{ item.product.price }} Tk.</span>
+                     </div>
+                  {% endfor %}
+
+                  <div class="border-t pt-4 space-y-2">
+                     <div class="flex justify-between text-sm">
+                        <span class="text-muted-foreground">Subtotal</span>
+                        <span class="font-medium text-foreground">{{ order.total_price }} Tk.</span>
+                     </div>
+                     {% if order.shipping_method == "STANDARD" %}
+                        <div class="flex justify-between text-sm">
+                           <span class="text-muted-foreground">Shipping ({{ order.shipping_method }})</span>
+                           <span class="font-medium text-foreground">60 Tk.</span>
+                        </div>
+                        <div class="flex justify-between text-sm font-medium pt-2 border-t">
+                           <span>Total</span>
+                           <span>{{ order.total_price|add:60 }} Tk.</span>
+                        </div>
+                     {% else %}
+                        <div class="flex justify-between text-sm">
+                           <span class="text-muted-foreground">Shipping ({{ order.shipping_method }})</span>
+                           <span class="font-medium text-foreground">150 Tk.</span>
+                        </div>
+                        <div class="flex justify-between text-sm font-medium pt-2 border-t">
+                           <span>Total</span>
+                           <span>{{ order.total_price|add:150 }} Tk.</span>
+                        </div>
+                     {% endif %}
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <div class="mt-8">
+            <a href="{% url 'home' %}" class="btn btn-primary">
+               {% include "icons/arrow.html" with class="rotate-180" %}
+               <span>Continue Shopping</span>
+            </a>
+         </div>
+
+         <div class="mt-6 text-center text-sm text-muted-foreground">
+            <p>
+               Contact us anytime at <a href="mailto:support@sobai.com" class="text-primary hover:underline">support@sobai.com</a>
+            </p>
+            <p>
+               or <a href="tel:+8801234567890" class="text-foreground hover:underline">+8801234-567890</a>
+            </p>
+         </div>
+      </div>
+   </section>
+{% endblock slot %}
