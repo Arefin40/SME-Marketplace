@@ -1,0 +1,57 @@
+{% extends "layouts/root_layout.html" %}
+{% load static %}
+
+{% block slot %}
+   <section class="px-10 py-6 relative col-start-2 col-span-1 bg-white flex flex-col rounded-lg shadow-card h-full overflow-hidden space-y-6">
+      <header class="pb-2 flex items-center justify-between">
+         <h1 class="font-bold text-lg text-foreground">Order History</h1>
+         <p>
+            <span class="font-semibold text-foreground">{{ orders|length }}</span>
+            <span>orders</span>
+         </p>
+      </header>
+
+      {% if orders %}
+         <div class="grid gap-4">
+            {% for order in orders %}
+               <div class="p-4 flex items-center justify-between bg-white rounded-lg border hover:shadow-sm transition-all">
+                  <div class="space-y-2">
+                     <div class="flex items-center gap-2">
+                        <p class="font-medium text-foreground">Order #{{ order.id }}</p>
+                        <span class="px-2 py-0.5 text-sm rounded-full {% if order.status == 'PENDING' %}bg-yellow-100 text-yellow-700{% elif order.status == 'COMPLETED' %}bg-green-100 text-green-700{% else %}bg-gray-100 text-gray-700{% endif %}">
+                           {{ order.status }}
+                        </span>
+                     </div>
+                     <p class="text-sm text-muted-foreground">{{ order.order_date|date:"F j, Y" }}</p>
+                  </div>
+
+                  <div class="flex items-center gap-4">
+                     <p class="font-semibold text-foreground">${{ order.total_price }}</p>
+                     <a href="{% url 'order-details' order.id %}"
+                        class="px-4 py-2 rounded-full bg-gray-100 text-foreground hover:bg-gray-200 transition-colors">
+                        View Details
+                     </a>
+                  </div>
+               </div>
+            {% endfor %}
+         </div>
+      {% else %}
+         <div class="flex-center flex-col flex-1">
+            <img width="512"
+                 height="512"
+                 src="{% static 'images/EmptyCart.svg' %}"
+                 alt="No Orders"
+                 class="w-full max-w-md mx-auto" />
+
+            <div class="text-center mt-6">
+               <p class="text-2xl text-foreground font-semibold tracking-tight">No orders yet</p>
+               <p class="mt-1 text-muted-foreground">Ready to start shopping? Your order history will appear here.</p>
+               <a href="{% url 'all_products' %}"
+                  class="mt-4 inline-flex px-4 py-2 rounded-full bg-primary text-white hover:bg-primary/90 transition-colors">
+                  Start Shopping
+               </a>
+            </div>
+         </div>
+      {% endif %}
+   </section>
+{% endblock slot %}

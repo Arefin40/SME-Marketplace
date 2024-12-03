@@ -1,0 +1,177 @@
+{% extends "layouts/base.html" %}
+
+{% load static %}
+
+{% block body %}
+   <section class="p-3 grid grid-cols-[20rem,1fr] h-full overflow-hidden">
+      {% include "snippets/sidebar.html" %}
+
+      <main class="relative col-start-2 col-span-1 h-full rounded-lg shadow-card overflow-hidden">
+         <main class="max-h-full h-full bg-white/75 overflow-y-auto">
+            <div class="p-4 space-y-5">
+               <header class="flex items-center justify-between">
+                  <div class="space-y-3">
+                     <h2 class="text-foreground text-xl font-bold leading-tight">Order #{{ order.id }}</h2>
+                     <p>Placed on {{ order.order_date|date:"M d, Y" }}</p>
+                  </div>
+               </header>
+
+               <div class="bg-white rounded-lg border border-gray-100 shadow-card p-6">
+                  <div class="space-y-6">
+                     <div class="flex items-center justify-between">
+                        <h3 class="text-foreground font-bold">Order Status</h3>
+                        <div class="flex items-center gap-x-4">
+                           <div class="flex items-center gap-x-2">
+                              {% if order.status == 'PENDING' %}
+                                 <div class="flex items-center gap-x-2 bg-yellow-50 px-3 py-1.5 rounded-full">
+                                    <span class="size-2.5 rounded-full bg-yellow-400 ring-2 ring-yellow-100"></span>
+                                    <span class="text-sm font-medium text-yellow-800">Pending</span>
+                                 </div>
+                              {% elif order.status == 'SHIPPED' %}
+                                 <div class="flex items-center gap-x-2 bg-blue-50 px-3 py-1.5 rounded-full">
+                                    <span class="size-2.5 rounded-full bg-blue-400 ring-2 ring-blue-100"></span>
+                                    <span class="text-sm font-medium text-blue-800">Shipped</span>
+                                 </div>
+                              {% elif order.status == 'DELIVERED' %}
+                                 <div class="flex items-center gap-x-2 bg-green-50 px-3 py-1.5 rounded-full">
+                                    <span class="size-2.5 rounded-full bg-green-400 ring-2 ring-green-100"></span>
+                                    <span class="text-sm font-medium text-green-800">Delivered</span>
+                                 </div>
+                              {% else %}
+                                 <div class="flex items-center gap-x-2 bg-red-50 px-3 py-1.5 rounded-full">
+                                    <span class="size-2.5 rounded-full bg-red-400 ring-2 ring-red-100"></span>
+                                    <span class="text-sm font-medium text-red-800">Cancelled</span>
+                                 </div>
+                              {% endif %}
+                           </div>
+                           <div class="flex items-center gap-x-2">
+                              {% if order.is_paid %}
+                                 <div class="flex items-center gap-x-2 bg-green-50 px-3 py-1.5 rounded-full">
+                                    <span class="size-2.5 rounded-full bg-green-400 ring-2 ring-green-100"></span>
+                                    <span class="text-sm font-medium text-green-800">Paid</span>
+                                 </div>
+                              {% else %}
+                                 <div class="flex items-center gap-x-2 bg-red-50 px-3 py-1.5 rounded-full">
+                                    <span class="size-2.5 rounded-full bg-red-400 ring-2 ring-red-100"></span>
+                                    <span class="text-sm font-medium text-red-800">Unpaid</span>
+                                 </div>
+                              {% endif %}
+                           </div>
+                        </div>
+                     </div>
+
+                     {% if not order.is_paid and request.user == order.user %}
+                        <div class="border-t border-gray-100 pt-6">
+                           <div class="bg-yellow-50 p-4 rounded-lg">
+                              <div class="flex">
+                                 <div class="flex-shrink-0">
+                                    <svg class="h-5 w-5 text-yellow-400"
+                                         viewBox="0 0 20 20"
+                                         fill="currentColor">
+                                       <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                 </div>
+                                 <div class="ml-3">
+                                    <h3 class="text-sm font-medium text-yellow-800">Payment Required</h3>
+                                    <p class="mt-2 text-sm text-yellow-700">
+                                       Please complete the payment to confirm your order. Your order will be processed once the payment is received.
+                                    </p>
+                                    <div class="mt-4">
+                                       <a href="#"
+                                          class="btn btn-primary rounded-lg hover:shadow-lg hover:shadow-primary/30">
+                                          Make Payment Now
+                                       </a>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     {% endif %}
+                  </div>
+               </div>
+
+               <div class="bg-white rounded-lg border border-gray-100 shadow-card p-6 space-y-8">
+                  <div>
+                     <h3 class="text-foreground font-bold mb-6">Shipping & Billing Information</h3>
+                     <div class="grid grid-cols-2 gap-x-12">
+                        <div class="space-y-6">
+                           <div>
+                              <p class="text-sm font-medium mb-4">Shipping Details</p>
+                              <div class="grid grid-cols-2 gap-4">
+                                 <div>
+                                    <p class="text-sm">Name</p>
+                                    <p class="mt-2 text-foreground">{{ order.shipping_name }}</p>
+                                 </div>
+                                 <div>
+                                    <p class="text-sm">Phone</p>
+                                    <p class="mt-2 text-foreground">{{ order.shipping_contact }}</p>
+                                 </div>
+                                 <div class="col-span-2">
+                                    <p class="text-sm">Address</p>
+                                    <p class="mt-2 text-foreground">{{ order.shipping_address }}, {{ order.shipping_area }}, {{ order.shipping_zone }}</p>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+
+                        <div class="space-y-6">
+                           <div>
+                              <p class="text-sm font-medium mb-4">Billing Details</p>
+                              <div class="grid grid-cols-2 gap-4">
+                                 <div>
+                                    <p class="text-sm">Name</p>
+                                    <p class="mt-2 text-foreground">{{ order.billing_name }}</p>
+                                 </div>
+                                 <div>
+                                    <p class="text-sm">Phone</p>
+                                    <p class="mt-2 text-foreground">{{ order.billing_contact }}</p>
+                                 </div>
+                                 <div class="col-span-2">
+                                    <p class="text-sm">Address</p>
+                                    <p class="mt-2 text-foreground">{{ order.billing_address }}, {{ order.billing_area }}, {{ order.billing_zone }}</p>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div>
+                     <h3 class="text-foreground font-bold mb-4">Delivery Method</h3>
+                     <p class="text-foreground">{{ order.get_shipping_method_display }}</p>
+                  </div>
+               </div>
+
+               <div class="bg-white rounded-lg border border-gray-100 shadow-card p-6">
+                  <h3 class="text-foreground font-bold mb-6">Order Items</h3>
+                  <div class="divide-y divide-gray-100">
+                     {% for item in order_items %}
+                        <div class="py-6 flex items-center gap-6">
+                           <img src="{{ item.product.image.url }}"
+                                alt="{{ item.product.name }}"
+                                width="80"
+                                height="80"
+                                class="size-20 rounded-lg object-cover" />
+                           <div class="flex-1">
+                              <h4 class="text-foreground font-semibold">{{ item.product.name }}</h4>
+                              <p class="mt-1 text-sm">
+                                 Store: <span class="font-medium text-foreground">{{ item.product.collection.store.name }}</span>
+                              </p>
+                              <p class="mt-1 text-sm">Quantity: {{ item.quantity }}</p>
+                           </div>
+                           <p class="text-foreground">৳{{ item.product.price|floatformat:2 }}</p>
+                        </div>
+                     {% endfor %}
+                  </div>
+                  <div class="mt-8 pt-6 border-t border-gray-100">
+                     <div class="flex justify-between text-foreground">
+                        <p>Total</p>
+                        <p>৳{{ order.total_price|floatformat:2 }}</p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </main>
+      </main>
+   </section>
+{% endblock body %}
