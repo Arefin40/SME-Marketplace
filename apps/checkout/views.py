@@ -121,6 +121,26 @@ def get_cart_items_and_total_price(user):
     return cart_items, total_price
 
 
+@role_required(["ADMIN", "MERCHANT"])
+def received_orders(request):
+    if request.user.role == "ADMIN":
+        # Admin sees all orders
+        orders = Order.objects.all().order_by("-order_date")
+        return render(request, "manage_orders.html", {"orders": orders})
+
+    elif request.user.role == "MERCHANT":
+        merchant_orders = (
+            Order.objects.filter(
+                items__product__collection__store__merchant=request.user, status="PENDING"
+            )
+            .distinct()
+            .order_by("-order_date")
+        )
+        return render(request, "received_orders.html", {"orders": merchant_orders})
+
+    return redirect("home")
+
+
 @login_required
 def orders_history(request):
     user = request.user

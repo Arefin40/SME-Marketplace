@@ -44,19 +44,21 @@
                                  </div>
                               {% endif %}
                            </div>
-                           <div class="flex items-center gap-x-2">
-                              {% if order.is_paid %}
-                                 <div class="flex items-center gap-x-2 bg-green-50 px-3 py-1.5 rounded-full">
-                                    <span class="size-2.5 rounded-full bg-green-400 ring-2 ring-green-100"></span>
-                                    <span class="text-sm font-medium text-green-800">Paid</span>
-                                 </div>
-                              {% else %}
-                                 <div class="flex items-center gap-x-2 bg-red-50 px-3 py-1.5 rounded-full">
-                                    <span class="size-2.5 rounded-full bg-red-400 ring-2 ring-red-100"></span>
-                                    <span class="text-sm font-medium text-red-800">Unpaid</span>
-                                 </div>
-                              {% endif %}
-                           </div>
+                           {% if request.user.role != 'MERCHANT' %}
+                              <div class="flex items-center gap-x-2">
+                                 {% if order.is_paid %}
+                                    <div class="flex items-center gap-x-2 bg-green-50 px-3 py-1.5 rounded-full">
+                                       <span class="size-2.5 rounded-full bg-green-400 ring-2 ring-green-100"></span>
+                                       <span class="text-sm font-medium text-green-800">Paid</span>
+                                    </div>
+                                 {% else %}
+                                    <div class="flex items-center gap-x-2 bg-red-50 px-3 py-1.5 rounded-full">
+                                       <span class="size-2.5 rounded-full bg-red-400 ring-2 ring-red-100"></span>
+                                       <span class="text-sm font-medium text-red-800">Unpaid</span>
+                                    </div>
+                                 {% endif %}
+                              </div>
+                           {% endif %}
                         </div>
                      </div>
 
@@ -90,57 +92,59 @@
                   </div>
                </div>
 
-               <div class="bg-white rounded-lg border border-gray-100 shadow-card p-6 space-y-8">
-                  <div>
-                     <h3 class="text-foreground font-bold mb-6">Shipping & Billing Information</h3>
-                     <div class="grid grid-cols-2 gap-x-12">
-                        <div class="space-y-6">
-                           <div>
-                              <p class="text-sm font-medium mb-4">Shipping Details</p>
-                              <div class="grid grid-cols-2 gap-4">
-                                 <div>
-                                    <p class="text-sm">Name</p>
-                                    <p class="mt-2 text-foreground">{{ order.shipping_name }}</p>
-                                 </div>
-                                 <div>
-                                    <p class="text-sm">Phone</p>
-                                    <p class="mt-2 text-foreground">{{ order.shipping_contact }}</p>
-                                 </div>
-                                 <div class="col-span-2">
-                                    <p class="text-sm">Address</p>
-                                    <p class="mt-2 text-foreground">{{ order.shipping_address }}, {{ order.shipping_area }}, {{ order.shipping_zone }}</p>
+               {% if request.user.role != 'MERCHANT' %}
+                  <div class="bg-white rounded-lg border border-gray-100 shadow-card p-6 space-y-8">
+                     <div>
+                        <h3 class="text-foreground font-bold mb-6">Shipping & Billing Information</h3>
+                        <div class="grid grid-cols-2 gap-x-12">
+                           <div class="space-y-6">
+                              <div>
+                                 <p class="text-sm font-medium mb-4">Shipping Details</p>
+                                 <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                       <p class="text-sm">Name</p>
+                                       <p class="mt-2 text-foreground">{{ order.shipping_name }}</p>
+                                    </div>
+                                    <div>
+                                       <p class="text-sm">Phone</p>
+                                       <p class="mt-2 text-foreground">{{ order.shipping_contact }}</p>
+                                    </div>
+                                    <div class="col-span-2">
+                                       <p class="text-sm">Address</p>
+                                       <p class="mt-2 text-foreground">{{ order.shipping_address }}, {{ order.shipping_area }}, {{ order.shipping_zone }}</p>
+                                    </div>
                                  </div>
                               </div>
                            </div>
-                        </div>
 
-                        <div class="space-y-6">
-                           <div>
-                              <p class="text-sm font-medium mb-4">Billing Details</p>
-                              <div class="grid grid-cols-2 gap-4">
-                                 <div>
-                                    <p class="text-sm">Name</p>
-                                    <p class="mt-2 text-foreground">{{ order.billing_name }}</p>
-                                 </div>
-                                 <div>
-                                    <p class="text-sm">Phone</p>
-                                    <p class="mt-2 text-foreground">{{ order.billing_contact }}</p>
-                                 </div>
-                                 <div class="col-span-2">
-                                    <p class="text-sm">Address</p>
-                                    <p class="mt-2 text-foreground">{{ order.billing_address }}, {{ order.billing_area }}, {{ order.billing_zone }}</p>
+                           <div class="space-y-6">
+                              <div>
+                                 <p class="text-sm font-medium mb-4">Billing Details</p>
+                                 <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                       <p class="text-sm">Name</p>
+                                       <p class="mt-2 text-foreground">{{ order.billing_name }}</p>
+                                    </div>
+                                    <div>
+                                       <p class="text-sm">Phone</p>
+                                       <p class="mt-2 text-foreground">{{ order.billing_contact }}</p>
+                                    </div>
+                                    <div class="col-span-2">
+                                       <p class="text-sm">Address</p>
+                                       <p class="mt-2 text-foreground">{{ order.billing_address }}, {{ order.billing_area }}, {{ order.billing_zone }}</p>
+                                    </div>
                                  </div>
                               </div>
                            </div>
                         </div>
                      </div>
-                  </div>
 
-                  <div>
-                     <h3 class="text-foreground font-bold mb-4">Delivery Method</h3>
-                     <p class="text-foreground">{{ order.get_shipping_method_display }}</p>
+                     <div>
+                        <h3 class="text-foreground font-bold mb-4">Delivery Method</h3>
+                        <p class="text-foreground">{{ order.get_shipping_method_display }}</p>
+                     </div>
                   </div>
-               </div>
+               {% endif %}
 
                <div class="bg-white rounded-lg border border-gray-100 shadow-card p-6">
                   <h3 class="text-foreground font-bold mb-6">Order Items</h3>
@@ -163,12 +167,14 @@
                         </div>
                      {% endfor %}
                   </div>
-                  <div class="mt-8 pt-6 border-t border-gray-100">
-                     <div class="flex justify-between text-foreground">
-                        <p>Total</p>
-                        <p>৳{{ order.total_price|floatformat:2 }}</p>
+                  {% if request.user.role != 'MERCHANT' %}
+                     <div class="mt-8 pt-6 border-t border-gray-100">
+                        <div class="flex justify-between text-foreground">
+                           <p>Total</p>
+                           <p>৳{{ order.total_price|floatformat:2 }}</p>
+                        </div>
                      </div>
-                  </div>
+                  {% endif %}
                </div>
             </div>
          </main>

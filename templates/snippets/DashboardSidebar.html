@@ -9,9 +9,10 @@
       {% if user.role == 'ADMIN' %}
          {% include "snippets/SidebarItem.html" with path="manage-users" icon="icons/User.html" label="Manage Users" %}
          {% include "snippets/SidebarItem.html" with path="merchant-applications" icon="icons/MerchantRequests.html" label="Merchant Requests" %}
+         {% include "snippets/SidebarItem.html" with path="received-orders" icon="icons/Orders.html" label="Orders History" %}
       {% elif user.role == 'MERCHANT' %}
          {% include "snippets/SidebarItem.html" with path="manage-inventory" icon="icons/Inventory.html" label="Manage Inventory" %}
-         {% include "snippets/SidebarItem.html" with path="manage-orders" icon="icons/Orders.html" label="Manage Orders" %}
+         {% include "snippets/SidebarItem.html" with path="received-orders" icon="icons/Orders.html" label="Received Orders" %}
          {% include "snippets/SidebarItem.html" with path="manage-posts" icon="icons/Post.html" label="Manage Posts" %}
       {% endif %}
    </ul>
