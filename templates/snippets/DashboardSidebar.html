@@ -10,6 +10,7 @@
          {% include "snippets/SidebarItem.html" with path="manage-users" icon="icons/User.html" label="Manage Users" %}
          {% include "snippets/SidebarItem.html" with path="merchant-applications" icon="icons/MerchantRequests.html" label="Merchant Requests" %}
       {% elif user.role == 'MERCHANT' %}
+         {% include "snippets/SidebarItem.html" with path="manage-inventory" icon="icons/Inventory.html" label="Manage Inventory" %}
          {% include "snippets/SidebarItem.html" with path="manage-orders" icon="icons/Orders.html" label="Manage Orders" %}
          {% include "snippets/SidebarItem.html" with path="manage-posts" icon="icons/Post.html" label="Manage Posts" %}
       {% endif %}
@@ -30,16 +31,16 @@
                   <p class="text-sm text-muted-foreground">{{ user.stores.first.total_followers }} Followers</p>
                </div>
             {% else %}
-            <img src="{{ user.image.url }}"
-                 width="40"
-                 height="40"
-                 alt="Profile Picture"
-                 class="size-11 rounded-full flex-shrink-0 border border-gray-200" />
+               <img src="{{ user.image.url }}"
+                    width="40"
+                    height="40"
+                    alt="Profile Picture"
+                    class="size-11 rounded-full flex-shrink-0 border border-gray-200" />
 
-            <div class="text-left w-full leading-none space-y-1">
-               <p class="font-semibold">{{ user.name }}</p>
-               <p class="text-sm text-muted-foreground">Account Settings</p>
-            </div>
+               <div class="text-left w-full leading-none space-y-1">
+                  <p class="font-semibold">{{ user.name }}</p>
+                  <p class="text-sm text-muted-foreground">Account Settings</p>
+               </div>
             {% endif %}
 
             <button onclick="ShowDropdownMenu(this)"
