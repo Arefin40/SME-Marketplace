@@ -209,15 +209,16 @@
    }
 
    function getAreas(event) {
-      console.log("executed");
       // Default to shipping if no address_type in event detail
-      let address_type = "shipping";
+      let address_type = event?.target?.id?.split("_")[1] || "shipping";
       if (event.type === "change" && event.detail && event.detail.address_type) {
          address_type = event.detail.address_type;
       }
    
       const zoneId = event.target.value;
       const areaSelect = document.getElementById(`id_${address_type}_area`);
+
+      console.log(address_type);
    
       // Check if area already has a selected value
       if (areaSelect.value && !event.detail) return;
@@ -228,6 +229,7 @@
          fetch(`/areas?zone=${zoneId}`)
             .then((response) => response.json())
             .then((data) => {
+               console.log(data);
                if (data.areas) {
                   data.areas.forEach((area) => {
                      areaSelect.appendChild(new Option(area.name, area.id));

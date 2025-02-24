@@ -72,7 +72,9 @@ class Order(models.Model):
         if not self.id:
             last_order = Order.objects.order_by("-id").first()
             if last_order:
-                self.id = str(int(last_order) + 1).zfill(5)
+                # Extract just the numeric ID from the last order
+                last_id = int(last_order.id)
+                self.id = str(last_id + 1).zfill(5)
             else:
                 self.id = "12345"
 

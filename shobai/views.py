@@ -6,7 +6,7 @@ from django.utils import timezone
 from apps.users.models import User
 from apps.social.models import Post, PostLike
 from apps.stores.models import Store, StoreFollow
-from apps.checkout.models import Order, OrderItem
+from apps.checkout.models import Order
 from apps.products.models import Product
 
 
@@ -22,11 +22,15 @@ def homepage(request):
     for post in posts:
         post.description = markdown.markdown(post.description)
 
-    stores = Store.objects.annotate(
-        is_following=models.Exists(
-            StoreFollow.objects.filter(store=models.OuterRef("pk"), user=request.user)
+    stores = (
+        Store.objects.exclude(merchant=request.user)
+        .annotate(
+            is_following=models.Exists(
+                StoreFollow.objects.filter(store=models.OuterRef("pk"), user=request.user)
+            )
         )
-    ).all()
+        .all()
+    )
 
     return render(request, "homepage.html", {"posts": posts, "stores": stores})
 

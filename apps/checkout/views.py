@@ -103,14 +103,13 @@ def place_order(request):
             # Clear cart items
             cart_items.delete()
 
-            return redirect(f"thankyou?order_id={order.id}")
+            return redirect("thankyou", order_id=order.id)
 
     return redirect("checkout")
 
 
 @login_required
-def thankyou(request):
-    order_id = request.GET.get("order_id")
+def thankyou(request, order_id):
     if not order_id:
         return redirect("home")
 
