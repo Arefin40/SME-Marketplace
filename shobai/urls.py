@@ -19,6 +19,7 @@ urlpatterns = [
     path("", include("apps.checkout.urls")),
     # For development only
     path("__reload__/", include("django_browser_reload.urls")),
+    path("products/", include("apps.products.urls")),
 ]
 
 if settings.DEBUG:
